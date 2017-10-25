@@ -1,0 +1,54 @@
+body {
+	font-size: 12px;
+	font-family: sans-serif;
+}
+table {
+	border-collapse: collapse;
+}
+table td {
+	border: 1px solid black;
+	padding: 5px;
+}
+.container {
+}
+
+.instance_info {
+	font-size: 20px;
+}
+#instance_info_domain {
+	font-size: 30px;
+	height: 32px;
+}
+
+.instance_info_submit {
+	font-size: 30px;
+	padding: 10px;
+}
+
+.cont_left {
+	display: none;
+	float: left;
+	width: 400px;
+}
+.cont_right {
+	display: none;
+	width: *;
+	height: 600px;
+	overflow-y: scroll;
+	border: 1px solid black;
+}
+
+
+#tiles {
+	line-height: 0px;
+	padding: 5px;
+}
+
+#emoji_palette {
+}
+
+#result {
+	width: 380px;
+	height: 200px;
+}
+
