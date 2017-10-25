@@ -32,21 +32,26 @@ table td {
 }
 .cont_right {
 	display: none;
+}
+
+#emoji_palette {
 	width: *;
 	height: 600px;
 	overflow-y: scroll;
 	border: 1px solid black;
 }
-
+#emoji_palette img {
+	cursor: pointer;
+}
 
 #tiles {
 	line-height: 0px;
 	padding: 5px;
 }
 
-#emoji_palette {
+#tiles img {
+	cursor: pointer;
 }
-
 #result {
 	width: 380px;
 	height: 200px;

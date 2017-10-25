@@ -1,8 +1,5 @@
 'use strict';
-
-let Application=function(args) {
-};
-
+let Application=function(args){};
 Application.prototype={
 
 	run: function(args){
@@ -61,7 +58,7 @@ Application.prototype={
 	},
 
 	emoji_palette: function(emoji) {
-		var t=this;
+		let t=this;
 		for(let i=0;i<emoji.length;i++) {
 		//	console.log(emoji[i]);
 			let ijq=$('<img>',{
@@ -94,7 +91,7 @@ Application.prototype={
 	},
 
 	result: function() {
-		var t=this;
+		let t=this;
 		let nr=[];
 		let seen_y=false;
 		for(let y=10-1;y>=0;y--) {
@@ -123,7 +120,5 @@ Application.prototype={
 	},
 
 };
-
 $(function(){ new Application().run(); });
-
 
