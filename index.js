@@ -1,5 +1,8 @@
 'use strict';
-let Application=function(args){};
+let Application=function(args){
+	this.width=11;
+	this.height=11;
+};
 Application.prototype={
 
 	run: function(args){
@@ -24,12 +27,12 @@ Application.prototype={
 		let t=this;
 		t.tiles_sc=[];
 
-		for(let y=0;y<10;y++) {
+		for(let y=0; y<t.height; y++) {
 			let scr=[];
-			for(let x=0;x<10;x++) {
+			for(let x=0; x<t.width; x++) {
 				let blank=$(t.blank_idom).clone();
 				blank.css({
-					'border':'2px solid #AAAAAA',
+					'border':'2px solid #333333',
 					'margin':'1px',
 				});
 				$(blank).attr({
@@ -65,8 +68,7 @@ Application.prototype={
 				src: emoji[i].url,
 				'data-shortcode': emoji[i].shortcode,
 				css: {
-					'border': '2px solid #FFFFFF',
-					'background-color': '#FFFFFF',
+					'border': '2px solid rgb(57, 63, 79)',
 					'object-fit': 'contain',
 					'width':  32,
 					'height': 32,
@@ -81,10 +83,10 @@ Application.prototype={
 			let tg=e.target;
 			if (tg == t.selected_idom ) { return; }
 	//		console.log(tg.dataset.shortcode);
-			$(tg).css('border','2px solid #FF0000');
+			$(tg).css('border','2px solid #FFFFFF');
 			t.selected_idom=tg;
 			if(t.prev_selected_idom) {
-				$(t.prev_selected_idom).css('border','2px solid #FFFFFF');
+				$(t.prev_selected_idom).css('border','2px solid rgb(57, 63, 79)');
 			}
 			t.prev_selected_idom=tg;
 		});
@@ -94,10 +96,10 @@ Application.prototype={
 		let t=this;
 		let nr=[];
 		let seen_y=false;
-		for(let y=10-1;y>=0;y--) {
+		for(let y=t.height-1;y>=0;y--) {
 			let nc=[];
 			let seen_x=false;
-			for(let x=10-1;x>=0;x--) {
+			for(let x=t.width-1;x>=0;x--) {
 				let ts=t.tiles_sc[y][x];
 				if(ts != 'blank') { seen_x=true }
 				if(seen_x) { nc.push(ts) }

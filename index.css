@@ -1,7 +1,16 @@
 body {
 	font-size: 12px;
 	font-family: sans-serif;
+	background-color: #282c37;
+	color:#FFFFFF;
 }
+h1 {
+	background-color:rgb(68, 75, 93);
+	padding: 5px;
+	margin: 1px;
+	font-size:20px;
+}
+
 table {
 	border-collapse: collapse;
 }
@@ -28,7 +37,7 @@ table td {
 .cont_left {
 	display: none;
 	float: left;
-	width: 400px;
+	width: 430px;
 }
 .cont_right {
 	display: none;
@@ -36,9 +45,12 @@ table td {
 
 #emoji_palette {
 	width: *;
+	padding: 5px;
+	margin: 5px;
 	height: 600px;
 	overflow-y: scroll;
 	border: 1px solid black;
+
 }
 #emoji_palette img {
 	cursor: pointer;
@@ -47,13 +59,16 @@ table td {
 #tiles {
 	line-height: 0px;
 	padding: 5px;
+	background-color:rgb(57, 63, 79);
 }
 
 #tiles img {
 	cursor: pointer;
 }
 #result {
-	width: 380px;
-	height: 200px;
+	width: 420px;
+	height: 180px;
+	padding: 5px;
+	font-size:12px;
 }
 
