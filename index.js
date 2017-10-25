@@ -1,13 +1,16 @@
 'use strict';
 
 let Application=function(args) {
-	this.initargs=args;
 };
 
 Application.prototype={
 
 	run: function(args){
-		var t=this;
+		let t=this;
+		let wl=window.location.search.substring(1);
+		if(wl) {
+			$('#instance_info_domain').val(wl);
+		}
 		$('#instance_info_submit').on('click',function() {
 			$.get("https://"+$("#instance_info_domain").val()+"/api/v1/custom_emojis",function(json){
 				t.emoji_palette(json);
@@ -21,7 +24,7 @@ Application.prototype={
 	},
 
 	tiles: function() {
-		var t=this;
+		let t=this;
 		t.tiles_sc=[];
 
 		for(let y=0;y<10;y++) {
@@ -45,7 +48,7 @@ Application.prototype={
 		$('#tiles img').on('click',function(e) {
 			let tg=e.target;
 			let x=tg.dataset.x, y=tg.dataset.y;
-
+			if(!t.selected_idom) { return }
 			if ( tg.src == t.selected_idom.src ) {
 				$(tg).attr({ src: t.blank_idom.src });
 				t.tiles_sc[y][x]='blank';
