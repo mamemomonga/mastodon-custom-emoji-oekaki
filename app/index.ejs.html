@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<div class="container">
+<div class="container_intro">
 <h1>マストドン カスタム絵文字でお絵かきツール</h1>
 
 <div class="instance_info">
@@ -25,22 +25,30 @@
 <input type="submit" id="instance_info_submit" value=" 開 始 ">
 <a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank">ソースコードはこちら</a>
 </div>
+</div>
 
+<div class="container_main">
+<h1>マストドン カスタム絵文字でお絵かきツール</h1>
 <div class="cont_left">
-
 <div id="tiles"></div>
-
 <textarea id="result"></textarea>
 <div class="cont_ret_ctrl">
-<input type="button" id="ret_selall_copy" value="全て選択してコピー">
+<input type="button" id="bt_ret_copy" value="コピー"> 
+<input type="button" id="bt_ret_share" value="シェア">
 </div>
 <div class="cont_result_count">文字数: <span id="result_count">0</span></div>
 </div>
 
 <div class="cont_right">
+<div class="cont_right_top">
+<input type="button" id="bt_reset" value="リセット">
+<span id="instance_domain">-</span>
+<span id="selected_shortname">-</span>
+</div>
 <div id="emoji_palette"></div>
 </div>
 
+<div style="clear:both"></div>
 </div>
 
 <% if(production) { %>

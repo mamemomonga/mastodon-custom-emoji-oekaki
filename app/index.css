@@ -20,7 +20,9 @@ h1 {
 	font-size:18px;
 	font-weight: bold;
 }
-.container {
+
+.container_intro {
+	display: none;
 	background-color:#000000;
 }
 
@@ -46,37 +48,21 @@ h1 {
 	padding: 0px;
 }
 
-
-.cont_right {
+.container_main {
 	display: none;
 	background-color:#000000;
-}
-#emoji_palette {
-	padding: 5px;
-	margin: 0px;
-	height: 600px;
-	overflow-y: scroll;
-	border: 2px solid #000000;
-	background-color:rgb(57, 63, 79);
-}
-#emoji_palette img {
-	cursor: pointer;
 }
 
 /*  --- */
 .cont_left {
-	display: none;
 	float: left;
-	width: 428px;
 	height: 614px;
 }
 
 #tiles {
-	top: 0;
-	left: 0;
-	width: 428px;
+	width: 418px;
 	height: 428px;
-	padding: 4px;
+	padding: 4px 4px 4px 4px;
 	background-color:rgb(57, 63, 79);
 }
 
@@ -85,11 +71,11 @@ h1 {
 }
 
 #result {
+	width: 414px;
+	height: 140px;
 	padding: 5px;
 	font-size:12px;
 	background-color:#AAAAAA;
-	width: 420px;
-	height: 110px;
 
 }
 .cont_ret_ctrl {
@@ -102,4 +88,35 @@ h1 {
 	background-color:#000000;
 	vertical-align: middle;
 }
+
+/*  --- */
+.cont_right {
+	overflow: hidden;
+	background-color:#000000;
+}
+.cont_right_top {
+	height: 12px;
+	padding: 5px;
+	margin: 0px;
+	background-color:#000000;
+}
+
+#instance_domain {
+	margin: 0 5px 0 5px;
+}
+#selected_shortname {
+	margin: 0 5px 0 5px;
+}
+#emoji_palette {
+	height: 600px;
+	padding: 5px;
+	margin: 0px;
+	overflow-y: scroll;
+	border: 2px solid #000000;
+	background-color:rgb(57, 63, 79);
+}
+#emoji_palette img {
+	cursor: pointer;
+}
+
 

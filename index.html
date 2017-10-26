@@ -7,12 +7,12 @@
 
 
 <script type="text/javascript" src="./app/jquery-3.2.1.min.js"></script>
-<style type="text/css">a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container{background-color:#000}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.cont_right{display:none;background-color:#000}#emoji_palette{padding:5px;margin:0;height:600px;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.cont_left{display:none;float:left;width:428px;height:614px}#tiles{top:0;left:0;width:428px;height:428px;padding:4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{padding:5px;font-size:12px;background-color:#aaa;width:420px;height:110px}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_result_count{padding:5px;font-size:12px;background-color:#000;vertical-align:middle}</style>
+<style type="text/css">a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;background-color:#000}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:614px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:140px;padding:5px;font-size:12px;background-color:#aaa}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_result_count{padding:5px;font-size:12px;background-color:#000;vertical-align:middle}.cont_right{overflow:hidden;background-color:#000}.cont_right_top{height:12px;padding:5px;margin:0;background-color:#000}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}</style>
 
 
 </head>
 <body>
-<div class="container">
+<div class="container_intro">
 <h1>マストドン カスタム絵文字でお絵かきツール</h1>
 
 <div class="instance_info">
@@ -21,31 +21,40 @@
 <input type="submit" id="instance_info_submit" value=" 開 始 ">
 <a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank">ソースコードはこちら</a>
 </div>
+</div>
 
+<div class="container_main">
+<h1>マストドン カスタム絵文字でお絵かきツール</h1>
 <div class="cont_left">
-
 <div id="tiles"></div>
-
 <textarea id="result"></textarea>
 <div class="cont_ret_ctrl">
-<input type="button" id="ret_selall_copy" value="全て選択してコピー">
+<input type="button" id="bt_ret_copy" value="コピー"> 
+<input type="button" id="bt_ret_share" value="シェア">
 </div>
 <div class="cont_result_count">文字数: <span id="result_count">0</span></div>
 </div>
 
 <div class="cont_right">
+<div class="cont_right_top">
+<input type="button" id="bt_reset" value="リセット">
+<span id="instance_domain">-</span>
+<span id="selected_shortname">-</span>
+</div>
 <div id="emoji_palette"></div>
 </div>
 
+<div style="clear:both"></div>
 </div>
 
 
 <script type="text/javascript">// <![CDATA[
-(function(){var f=function(a){this.height=this.width=11};f.prototype={run:function(a){var b=this;(a=window.location.search.substring(1))&&$("#instance_info_domain").val(a);$("#ret_selall_copy").on("click",function(){$("#result").focus().select();document.execCommand("copy")});b.emojifetch_active=!1;$("#instance_info_submit").on("click",function(){b.emojifetch_active||b.emojifetch_start()})},emojifetch_start:function(){var a=this;a.emojifetch_active=!0;$("#instance_info_submit").val("取得中");$.ajax({type:"GET",
-url:"https://"+$("#instance_info_domain").val()+"/api/v1/custom_emojis",success:function(b){a.emojifetch_active=!1;a.emojifetch_success(b)},error:function(b,c,d){a.emojifetch_active=!1;alert("取得失敗")}})},emojifetch_success:function(a){this.emoji_palette(a);this.tiles();$(".instance_info").hide();$(".cont_left").show();$(".cont_right").show()},tiles:function(){var a=this;a.tiles_sc=[];for(var b=0;b<a.height;b++){for(var c=[],d=0;d<a.width;d++){var e=$(a.blank_idom).clone();e.css({border:"2px solid #333333",
-margin:"1px"});$(e).attr({"data-x":d,"data-y":b});$("#tiles").append(e);c[d]="blank"}$("#tiles").append($("<br>"));a.tiles_sc[b]=c}$("#tiles img").on("click",function(b){b=b.target;var c=b.dataset.x,d=b.dataset.y;a.selected_idom&&(b.src==a.selected_idom.src?($(b).attr({src:a.blank_idom.src}),a.tiles_sc[d][c]="blank"):($(b).attr({src:a.selected_idom.src}),a.tiles_sc[d][c]=a.selected_idom.dataset.shortcode),a.result())})},emoji_palette:function(a){for(var b=this,c=0;c<a.length;c++){var d=$("<img>",
-{src:a[c].url,"data-shortcode":a[c].shortcode,css:{border:"2px solid rgb(57, 63, 79)","object-fit":"contain",width:32,height:32}});$("#emoji_palette").append(d);"blank"==a[c].shortcode&&(b.blank_idom=d[0])}$("#emoji_palette img").on("click",function(a){a=a.target;a!=b.selected_idom&&($(a).css("border","2px solid #FFFFFF"),b.selected_idom=a,b.prev_selected_idom&&$(b.prev_selected_idom).css("border","2px solid rgb(57, 63, 79)"),b.prev_selected_idom=a)})},result:function(){for(var a=[],b=!1,c=this.height-
-1;0<=c;c--){for(var d=[],e=!1,g=this.width-1;0<=g;g--){var f=":"+this.tiles_sc[c][g]+":";":blank:"!=f&&(e=!0);e&&d.push(f)}0<d.length?b=!0:d.push("​");b&&a.push(d.reverse())}b=[];for(c=a.length-1;0<=c;c--)b.push(a[c].join("​"));a=b.join("\n");b=a.length;c="#000000";500<b&&(c="#FF0000");$(".cont_result_count").css("background-color",c);$("#result_count").text(b);$("#result").val(a)}};window.MstdnCustomEmojiOekaki=f})();
+(function(){var f=function(a){this.height=this.width=11};f.prototype={run:function(a){var b=this;$(".container_main").hide();$(".container_intro").show();(a=window.location.search.substring(1))&&$("#instance_info_domain").val(a);$("#bt_ret_copy").on("click",function(){$("#result").focus().select();document.execCommand("copy")});$("#bt_ret_share").on("click",function(){window.open("https://"+b.instance_domain+"/share?text="+encodeURI($("#result").val()))});$("#bt_reset").on("click",function(){b.tiles_reset()});
+b.emojifetch_active=!1;$("#instance_info_submit").on("click",function(){b.emojifetch_active||b.emojifetch_start()})},emojifetch_start:function(){var a=this;a.emojifetch_active=!0;$("#instance_info_submit").val("取得中");a.instance_domain=$("#instance_info_domain").val();$.ajax({type:"GET",url:"https://"+a.instance_domain+"/api/v1/custom_emojis",success:function(b){a.emojifetch_active=!1;a.emojifetch_success(b)},error:function(b,c,d){a.emojifetch_active=!1;alert("取得失敗")}})},emojifetch_success:function(a){this.emoji_palette(a);
+this.tiles();$("#instance_domain").text(this.instance_domain);$(".container_intro").hide();$(".container_main").show()},tiles_reset:function(){var a=this,b=a.blank_idom.src;$("#tiles img").each(function(c,d){d.src=b;a.tiles_sc[d.dataset.y][d.dataset.x]="blank"});a.result()},tiles:function(){var a=this;a.tiles_sc=[];for(var b=0;b<a.height;b++){for(var c=[],d=0;d<a.width;d++){var e=$(a.blank_idom).clone();e.css({border:"2px solid #333333",margin:"1px"});$(e).attr({"data-x":d,"data-y":b});$("#tiles").append(e);
+c[d]="blank"}$("#tiles").append($("<br>"));a.tiles_sc[b]=c}$("#tiles img").on("click",function(b){b=b.target;var c=b.dataset.x,d=b.dataset.y;a.selected_idom&&(b.src==a.selected_idom.src?($(b).attr({src:a.blank_idom.src}),a.tiles_sc[d][c]="blank"):($(b).attr({src:a.selected_idom.src}),a.tiles_sc[d][c]=a.selected_idom.dataset.shortcode),a.result())})},emoji_palette:function(a){for(var b=this,c=0;c<a.length;c++){var d=$("<img>",{src:a[c].url,"data-shortcode":a[c].shortcode,css:{border:"2px solid rgb(57, 63, 79)",
+"object-fit":"contain",width:32,height:32}});$("#emoji_palette").append(d);"blank"==a[c].shortcode&&(b.blank_idom=d[0])}$("#emoji_palette img").on("click",function(a){a=a.target;a!=b.selected_idom&&($("#selected_shortname").text(":"+a.dataset.shortcode+":"),$(a).css("border","2px solid #FFFFFF"),b.selected_idom=a,b.prev_selected_idom&&$(b.prev_selected_idom).css("border","2px solid rgb(57, 63, 79)"),b.prev_selected_idom=a)})},result:function(){for(var a=[],b=!1,c=this.height-1;0<=c;c--){for(var d=
+[],e=!1,g=this.width-1;0<=g;g--){var f=":"+this.tiles_sc[c][g]+":";":blank:"!=f&&(e=!0);e&&d.push(f)}0<d.length?b=!0:d.push("​");b&&a.push(d.reverse())}b=[];for(c=a.length-1;0<=c;c--)b.push(a[c].join("​"));a=b.join("\n");b=a.length;c="#000000";500<b&&(c="#FF0000");$(".cont_result_count").css("background-color",c);$("#result_count").text(b);$("#result").val(a)}};window.MstdnCustomEmojiOekaki=f})();
 
 // ]]></script>
 

@@ -9,16 +9,24 @@ Application.prototype={
 
 	run: function(args){
 		let t=this;
+		$('.container_main').hide();
+		$('.container_intro').show();
 
 		let wl=window.location.search.substring(1);
 		if(wl) {
 			$('#instance_info_domain').val(wl);
 		}
 
-		$('#ret_selall_copy').on('click',function() {
+		$('#bt_ret_copy').on('click',function() {
 			$('#result').focus().select();
 			document.execCommand('copy');
 		});
+
+		$('#bt_ret_share').on('click',function() {
+			window.open('https://'+t.instance_domain+'/share?text='+encodeURI($('#result').val()));
+		});
+
+		$('#bt_reset').on('click',function() { t.tiles_reset() });
 
 		t.emojifetch_active=false;
 		$('#instance_info_submit').on('click',function() {
@@ -31,9 +39,10 @@ Application.prototype={
 		let t=this;
 		t.emojifetch_active=true;
 		$('#instance_info_submit').val("取得中");
+		t.instance_domain=$("#instance_info_domain").val();
 		$.ajax({
 			type: 'GET',
-			url: "https://"+$("#instance_info_domain").val()+"/api/v1/custom_emojis",
+			url: "https://"+t.instance_domain+"/api/v1/custom_emojis",
 			success: function(json) {
 				t.emojifetch_active=false;
 				t.emojifetch_success(json);
@@ -49,10 +58,21 @@ Application.prototype={
 		let t=this;
 		t.emoji_palette(json);
 		t.tiles();
-		$('.instance_info').hide();
-		$('.cont_left').show();
-		$('.cont_right').show();
+		$('#instance_domain').text(t.instance_domain);
+		$('.container_intro').hide();
+		$('.container_main').show();
 	},
+
+	tiles_reset: function() {
+		let t=this;
+		let blank_src=t.blank_idom.src;
+		$('#tiles img').each(function(idx,elm) {
+			elm.src=blank_src;
+			t.tiles_sc[elm.dataset.y][elm.dataset.x]='blank';
+		});
+		t.result();
+	},
+
 
 	tiles: function() {
 		let t=this;
@@ -113,7 +133,7 @@ Application.prototype={
 		$('#emoji_palette img').on('click',function(e) {
 			let tg=e.target;
 			if (tg == t.selected_idom ) { return; }
-	//		console.log(tg.dataset.shortcode);
+			$('#selected_shortname').text(':'+tg.dataset.shortcode+':');
 			$(tg).css('border','2px solid #FFFFFF');
 			t.selected_idom=tg;
 			if(t.prev_selected_idom) {
