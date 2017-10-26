@@ -133,6 +133,16 @@ Application.prototype={
 
 	emoji_palette: function(emoji) {
 		let t=this;
+
+		emoji.sort(function(a,b) {
+			if(a.shortcode < b.shortcode) {
+				return -1;
+			} else if (a.shortcode > b.shortcode) {
+				return 1
+			}
+			return 0;
+		});
+
 		for(let i=0;i<emoji.length;i++) {
 		//	console.log(emoji[i]);
 			let ijq=$('<img>',{
