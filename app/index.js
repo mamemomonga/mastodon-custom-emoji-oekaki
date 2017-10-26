@@ -1,4 +1,6 @@
 'use strict';
+
+(function(){
 let Application=function(args){
 	this.width=11;
 	this.height=11;
@@ -7,20 +9,49 @@ Application.prototype={
 
 	run: function(args){
 		let t=this;
+
 		let wl=window.location.search.substring(1);
 		if(wl) {
 			$('#instance_info_domain').val(wl);
 		}
-		$('#instance_info_submit').on('click',function() {
-			$.get("https://"+$("#instance_info_domain").val()+"/api/v1/custom_emojis",function(json){
-				t.emoji_palette(json);
-				t.tiles();
-				$('.instance_info').hide();
-				$('.cont_left').show();
-				$('.cont_right').show();
-			});
+
+		$('#ret_selall_copy').on('click',function() {
+			$('#result').focus().select();
+			document.execCommand('copy');
 		});
 
+		t.emojifetch_active=false;
+		$('#instance_info_submit').on('click',function() {
+			if(!t.emojifetch_active) { t.emojifetch_start() }
+		});
+
+	},
+
+	emojifetch_start: function() {
+		let t=this;
+		t.emojifetch_active=true;
+		$('#instance_info_submit').val("取得中");
+		$.ajax({
+			type: 'GET',
+			url: "https://"+$("#instance_info_domain").val()+"/api/v1/custom_emojis",
+			success: function(json) {
+				t.emojifetch_active=false;
+				t.emojifetch_success(json);
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				t.emojifetch_active=false;
+				alert("取得失敗");
+			}
+		});
+	},
+
+	emojifetch_success: function(json) {
+		let t=this;
+		t.emoji_palette(json);
+		t.tiles();
+		$('.instance_info').hide();
+		$('.cont_left').show();
+		$('.cont_right').show();
 	},
 
 	tiles: function() {
@@ -128,5 +159,7 @@ Application.prototype={
 	},
 
 };
-$(function(){ new Application().run(); });
+
+window['MstdnCustomEmojiOekaki']=Application; })();
+
 

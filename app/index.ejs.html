@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>マストドン カスタム絵文字でお絵かきツール</title>
+<meta name="viewport" content="width=device-width">
+
+<% if(production) { %>
+<script type="text/javascript" src="./app/jquery-3.2.1.min.js"></script>
+<style type="text/css"><%- css %></style>
+<% } else { %>
+<script type="text/javascript" src="./jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="./reset.css">
+<link rel="stylesheet" href="./index.css">
+<% } %>
+
+</head>
+<body>
+<div class="container">
+<h1>マストドン カスタム絵文字でお絵かきツール</h1>
+
+<div class="instance_info">
+インスタンス 
+<input type="text" id="instance_info_domain" size="24">
+<input type="submit" id="instance_info_submit" value=" 開 始 ">
+<a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank">ソースコードはこちら</a>
+</div>
+
+<div class="cont_left">
+
+<div id="tiles"></div>
+
+<textarea id="result"></textarea>
+<div class="cont_ret_ctrl">
+<input type="button" id="ret_selall_copy" value="全て選択してコピー">
+</div>
+<div class="cont_result_count">文字数: <span id="result_count">0</span></div>
+</div>
+
+<div class="cont_right">
+<div id="emoji_palette"></div>
+</div>
+
+</div>
+
+<% if(production) { %>
+<script type="text/javascript">// <![CDATA[
+<%- js %>
+// ]]></script>
+<% } else { %>
+<script type="text/javascript" src="./index.js"></script>
+<% } %>
+
+<script type="text/javascript">// <![CDATA[
+$(function(){ new MstdnCustomEmojiOekaki().run(); });
+// ]]></script>
+
+</body>
+</html>
+
