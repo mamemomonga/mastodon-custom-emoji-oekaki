@@ -100,14 +100,14 @@ Application.prototype={
 			let nc=[];
 			let seen_x=false;
 			for(let x=t.width-1;x>=0;x--) {
-				let ts=t.tiles_sc[y][x];
-				if(ts != 'blank') { seen_x=true }
+				let ts=':'+t.tiles_sc[y][x]+':';
+				if(ts != ':blank:') { seen_x=true }
 				if(seen_x) { nc.push(ts) }
 			}
 			if(nc.length>0) {
 				seen_y=true;
 			} else {
-				nc.push('blank');
+				nc.push("\u200B");
 			}
 
 			if(seen_y) {
@@ -116,9 +116,15 @@ Application.prototype={
 		}
 		let lines=[];
 		for(let y=nr.length-1;y>=0;y--) {
-			lines.push(nr[y].map(function(v) { return ":"+v+":" }).join("\u200B"));
+			lines.push(nr[y].join("\u200B"));
 		}
-		$('#result').val(lines.join("\n"));
+		let buf=lines.join("\n");
+		let buflen=buf.length;
+		let bgcolor='#000000';
+		if(buflen > 500) { bgcolor='#FF0000'; }
+		$('.cont_result_count').css('background-color',bgcolor);
+		$('#result_count').text(buflen);
+		$('#result').val(buf);
 	},
 
 };

@@ -42,6 +42,9 @@ table td {
 .cont_right {
 	display: none;
 }
+.cont_result_count {
+	background-color:#000000;
+}
 
 #emoji_palette {
 	width: *;
