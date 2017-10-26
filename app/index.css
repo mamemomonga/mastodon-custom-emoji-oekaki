@@ -56,7 +56,7 @@ h1 {
 /*  --- */
 .cont_left {
 	float: left;
-	height: 614px;
+	height: 645px;
 }
 
 #tiles {
@@ -84,9 +84,8 @@ h1 {
 }
 .cont_result_count {
 	padding: 5px;
-	font-size:12px;
+	height: 18px;
 	background-color:#000000;
-	vertical-align: middle;
 }
 
 /*  --- */
@@ -94,6 +93,7 @@ h1 {
 	background-color:#000000;
 }
 .cont_right_top {
+	overflow: hidden;
 	height: 18px;
 	padding: 5px;
 	margin: 0px;
