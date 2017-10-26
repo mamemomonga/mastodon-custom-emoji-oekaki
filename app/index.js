@@ -63,6 +63,25 @@ Application.prototype={
 		$('.container_main').show();
 	},
 
+	search_update: function() {
+		let t=this;
+		let keyword=$('#text_search').val();
+		if(keyword != t.prev_keyword) {
+			if(keyword == "") {
+				$('#emoji_palette img').each(function(idx,elm) { $(elm).show() });
+			} else {
+				$('#emoji_palette img').each(function(idx,elm) {
+					if(elm.dataset.shortcode.search(keyword)!=-1) {
+						$(elm).show();
+					} else {
+						$(elm).hide();
+					}
+				});
+			}
+			t.prev_keyword=keyword;
+		}
+	},	
+
 	tiles_reset: function() {
 		let t=this;
 		let blank_src=t.blank_idom.src;
@@ -72,7 +91,6 @@ Application.prototype={
 		});
 		t.result();
 	},
-
 
 	tiles: function() {
 		let t=this;
@@ -109,6 +127,8 @@ Application.prototype={
 			}
 			t.result();
 		});
+
+		setInterval(function() { t.search_update() },500);
 	},
 
 	emoji_palette: function(emoji) {

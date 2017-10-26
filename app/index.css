@@ -95,7 +95,7 @@ h1 {
 	background-color:#000000;
 }
 .cont_right_top {
-	height: 12px;
+	height: 18px;
 	padding: 5px;
 	margin: 0px;
 	background-color:#000000;
@@ -119,4 +119,8 @@ h1 {
 	cursor: pointer;
 }
 
+.bottom {
+	padding: 10px;
+	text-align: center;
+}
 
