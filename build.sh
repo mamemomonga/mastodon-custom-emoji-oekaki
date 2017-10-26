@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 
+# Docker Image名
 DCRIMG_CC=mstdn-emj-oekk-cc
-DCRIMG_PY=mstdn-emj-oekk-py
 DCRIMG_ND=mstdn-emj-oekk-nd
 
 mkdir -p var
@@ -14,6 +14,7 @@ docker run -it --rm \
 	-v $(pwd)/app:/volumes/app:ro \
 	-v $(pwd)/var:/volumes/var \
 	$DCRIMG_CC
+
 docker run -it --rm \
 	-v $(pwd)/app:/volumes/app:ro \
 	-v $(pwd)/var:/volumes/var \

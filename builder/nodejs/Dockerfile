@@ -5,11 +5,11 @@ RUN set -xe && apk --update add tzdata && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     apk del tzdata && rm -rf /var/cache/apk/*
 
+ENV NODE_PATH=/usr/local/lib/node_modules
 RUN set -xe && \
-	node -e "console.log(global.module.paths)" && \
 	npm install -g ejs clean-css
 
-ADD assets /
+ADD app.js /
 
-CMD ["/app.sh"]
+CMD ["node","/app.js"]
 
