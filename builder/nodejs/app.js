@@ -67,6 +67,7 @@ app.prototype={
 			function(res,rej) {
 				let data=t.data;
 				data['production']=true;
+				data['buildnum']=process.env.BUILDNUM;
 				fs.writeFile('/volumes/var/index.prod.html',
 					ejs.render(tmpl,data),	
 					(err)=>{

@@ -1,5 +1,8 @@
 #!/bin/bash
 set -eu
+BUILDNUM=$(expr "$(cat BUILDNUM)" + 1)
+echo "BUILD: $BUILDNUM"
+echo $BUILDNUM > BUILDNUM
 
 # Docker Image名
 DCRIMG_CC=mstdn-emj-oekk-cc
@@ -16,6 +19,7 @@ docker run -it --rm \
 	$DCRIMG_CC
 
 docker run -it --rm \
+	-e BUILDNUM=$BUILDNUM \
 	-v $(pwd)/app:/volumes/app:ro \
 	-v $(pwd)/var:/volumes/var \
 	$DCRIMG_ND
