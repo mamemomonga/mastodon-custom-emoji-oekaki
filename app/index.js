@@ -50,6 +50,7 @@ Application.prototype={
 			error: function(jqXHR, textStatus, errorThrown){
 				t.emojifetch_active=false;
 				alert("取得失敗");
+				$('#instance_info_submit').val("開 始");
 			}
 		});
 	},
@@ -159,6 +160,9 @@ Application.prototype={
 			if( emoji[i].shortcode == 'blank' ) {
 				t.blank_idom=ijq[0];
 			}
+		}
+		if(!t.blank_idom) {
+			alert("このインスタンスには :blank: がないため使用できません");
 		}
 		$('#emoji_palette img').on('click',function(e) {
 			let tg=e.target;
