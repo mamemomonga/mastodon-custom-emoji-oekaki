@@ -7,7 +7,7 @@
 
 
 <script type="text/javascript" src="./app/jquery-3.2.1.min.js"></script>
-<style type="text/css">a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;background-color:#000}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:140px;padding:5px;font-size:12px;background-color:#aaa}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_result_count{padding:5px;height:18px;background-color:#000}.cont_right{background-color:#000}.cont_right_top{overflow:hidden;height:18px;padding:5px;margin:0;background-color:#000}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{padding:10px;text-align:center}</style>
+<style type="text/css">a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;text-align:center;background-color:#000}.container_intro h2{font-size:20px;margin:10px}.container_intro h3{font-size:14px;margin:10px;padding:10px}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:140px;padding:5px;font-size:12px;background-color:#aaa}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_result_count{padding:5px;height:18px;background-color:#000}.cont_right{background-color:#000}.cont_right_top{overflow:hidden;height:18px;padding:5px;margin:0;background-color:#000}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{padding:10px;text-align:center;background-color:#222}</style>
 
 
 </head>
@@ -16,9 +16,13 @@
 <h1>マストドン カスタム絵文字でお絵かきツール</h1>
 
 <div class="instance_info">
-インスタンス 
-<input type="text" id="instance_info_domain" size="24">
+<h2>インスタンス</h2>
+<div class="instance_info">
+<input type="text" id="instance_info_domain" placeholder="mstdn.jp" size="24">　
 <input type="submit" id="instance_info_submit" value=" 開 始 ">
+<br>
+</div>
+<h3>カスタム絵文字APIが使用でき、:blank: 絵文字が定義されている必要があります。</h3>
 </div>
 </div>
 
@@ -51,7 +55,7 @@
 <a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank">GitHub</a> | 
 <a href="https://theboss.tech/@mamemomonga" target="_blank">mamemomonga@theboss.tech</a>
 
- | BUILD: 4
+ | BUILD: 7
 
 </div>
 

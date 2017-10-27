@@ -23,8 +23,21 @@ h1 {
 
 .container_intro {
 	display: none;
+	text-align: center;
 	background-color:#000000;
 }
+
+.container_intro h2 {
+	font-size:20px;
+	margin: 10px;
+}
+
+.container_intro h3 {
+	font-size: 14px;
+	margin: 10px;
+	padding: 10px;
+}
+
 
 .instance_info {
 	background-color:#000000;
@@ -121,5 +134,6 @@ h1 {
 .bottom {
 	padding: 10px;
 	text-align: center;
+	background-color:#222222;
 }
 
