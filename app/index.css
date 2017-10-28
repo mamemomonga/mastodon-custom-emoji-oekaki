@@ -25,6 +25,7 @@ h1 {
 	display: none;
 	text-align: center;
 	background-color:#000000;
+	padding: 20px;
 }
 
 .container_intro h2 {
@@ -38,6 +39,13 @@ h1 {
 	padding: 10px;
 }
 
+.container_loading {
+	display: none;
+	text-align: center;
+	background-color:#000000;
+	font-size: 32px;
+	padding: 20px;
+}
 
 .instance_info {
 	background-color:#000000;

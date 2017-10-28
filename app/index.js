@@ -11,11 +11,21 @@ Application.prototype={
 		return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
 	},
 
+	switch_show_container: function(container) {
+		let t=this;
+		let containers=['main','loading','intro'];
+		for( let c in containers) {
+			let con=containers[c];
+			if(con==container) {
+				$('.container_'+con).show();
+			} else {
+				$('.container_'+con).hide();
+			}
+		}
+	},
+
 	run: function(args){
 		let t=this;
-		$('.container_main').hide();
-		$('.container_intro').show();
-
 		// ? を # に変更
 		if(window.location.search) {
 			let l=window.location;
@@ -53,21 +63,25 @@ Application.prototype={
 			if(!t.emojifetch_active) { t.emojifetch_start() }
 		});
 
-		$('#instance_info_domain').val(window.location.hash.substring(1) || "");
-
+		let instance_domain=window.location.hash.substring(1) || "";
+		if( instance_domain ) {
+			$('#instance_info_domain').val(instance_domain);
+			if(!t.emojifetch_active) { t.emojifetch_start() }
+			return;
+		}
+		t.switch_show_container('intro');
 	},
 
 
 	reset: function() {
 		let t=this;
-		$('.container_intro').show();
-		$('.container_main').hide();
+		t.switch_show_container('intro');
 	},
 
 	emojifetch_start: function() {
 		let t=this;
 		t.emojifetch_active=true;
-		$('#instance_info_submit').val("取得中");
+		t.switch_show_container('loading');
 		t.instance_domain=$("#instance_info_domain").val();
 		$.ajax({
 			type: 'GET',
@@ -78,16 +92,17 @@ Application.prototype={
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				t.emojifetch_active=false;
+				t.switch_show_container('intro');
 				alert("取得失敗");
-				$('#instance_info_submit').val("開 始");
+
 			}
 		});
 	},
 
 	emojifetch_success: function(json) {
 		let t=this;
-		$('#instance_info_submit').val("開 始");
 		window.location.hash=t.instance_domain;
+		t.switch_show_container('main');
 		t.emoji_palette(json);
 		t.tiles();
 		$('#instance_domain').text(t.instance_domain);
