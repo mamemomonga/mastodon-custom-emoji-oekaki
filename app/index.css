@@ -133,6 +133,11 @@ h1 {
 #instance_domain {
 	font-weight: bold;
 	text-decoration: underline;
+	cursor: pointer;
+}
+#selected_shortname {
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 .cont_right_top .left {

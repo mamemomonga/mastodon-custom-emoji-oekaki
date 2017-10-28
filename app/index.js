@@ -27,6 +27,12 @@ Application.prototype={
 			t.reset();
 		});
 
+		$('#selected_shortname').on('click',function() {
+			if(t.selected_idom) {
+				window.open(t.selected_idom.src);
+			}
+		});
+
 		$('#bt_search_clear').on('click',function() {
 			$('#text_search').val("");
 		});
