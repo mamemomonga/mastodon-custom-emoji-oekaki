@@ -1,28 +1,20 @@
 'use strict';
 
 (function(){
-let Application=function(args){
-	this.width=11;
-	this.height=11;
-};
-Application.prototype={
 
+let Utility=function(){}
+Utility.prototype={
 	regex_escape: function(str) {
 		return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
 	},
+};
 
-	switch_show_container: function(container) {
-		let t=this;
-		let containers=['main','loading','intro'];
-		for( let c in containers) {
-			let con=containers[c];
-			if(con==container) {
-				$('.container_'+con).show();
-			} else {
-				$('.container_'+con).hide();
-			}
-		}
-	},
+let Application=function(args){
+	this.width=11;
+	this.height=11;
+	this.util=new Utility();
+};
+Application.prototype={
 
 	run: function(args){
 		let t=this;
@@ -30,7 +22,7 @@ Application.prototype={
 		if(window.location.search) {
 			let l=window.location;
 			let src=l.search;
-			l.href=l.href.replace(new RegExp(t.regex_escape(src)),'')+'#'+src.substring(1);
+			l.href=l.href.replace(new RegExp(t.util.regex_escape(src)),'')+'#'+src.substring(1);
 		}
 
 		$('#instance_domain').on('click',function() {
@@ -72,6 +64,18 @@ Application.prototype={
 		t.switch_show_container('intro');
 	},
 
+	switch_show_container: function(container) {
+		let t=this;
+		let containers=['main','loading','intro'];
+		for( let c in containers) {
+			let con=containers[c];
+			if(con==container) {
+				$('.container_'+con).show();
+			} else {
+				$('.container_'+con).hide();
+			}
+		}
+	},
 
 	reset: function() {
 		let t=this;
@@ -263,5 +267,3 @@ Application.prototype={
 };
 
 window['MstdnCustomEmojiOekaki']=Application; })();
-
-
