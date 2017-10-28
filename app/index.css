@@ -131,10 +131,12 @@ h1 {
 }
 
 #text_search {
-	width: 100px;
+	width: 150px;
 }
 #bt_search_clear {
 	cursor: pointer;
+	margin: 0 20px 0 0;
+	font-size: 14px;
 }
 
 
