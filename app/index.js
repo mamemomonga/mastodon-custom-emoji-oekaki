@@ -30,7 +30,6 @@ KillGo.prototype={
 	load: function(emojis_jq) {
 		let t=this;
 		t.killers={};
-		console.log('load killme');
 		$('.cont_ret_ctrl .left .shuriken').text('');
 		emojis_jq.each(function(idx,elm){
 			let sc=elm.dataset.shortcode;
@@ -44,7 +43,7 @@ KillGo.prototype={
 	},
 	init: function() {
 		let t=this;
-		console.log('init killme');
+		console.log('Killme Baby!');
 		t.shuriken=$('<img>',{
 			src: t.shuriken_url,
 			css: {
@@ -75,21 +74,16 @@ KillGo.prototype={
 		let kmb=[];
 		for(let chi in buf) {
 			let chr=buf.charCodeAt(chi);
-			// カタカナ
-			if( chr>=p('30a1') && chr<=p('30f6')) {
-				kmb.push(k(chr));
 			// ひらがなはカタカナに
-			} else if( chr>=p('3041') && chr<=p('3093')) {
+			if( chr>=p('3041') && chr<=p('3093')) {
 				kmb.push(k(chr+96));
 			// スペース
 			} else if (chr == p('0020') || chr == p('3000')) {
 				kmb.push('blank');
-
 			// あうやつを拾う
 			} else if( t.killers[chr] ) {
 				kmb.push(t.killers[chr]);
 			}
-
 		}
 		return kmb;
 	}
