@@ -66,10 +66,15 @@ app.prototype={
 			},
 			function(res,rej) {
 				let data=t.data;
+				let minify = require('html-minifier').minify;
 				data['production']=true;
 				data['buildnum']=process.env.BUILDNUM;
+				let html=minify(ejs.render(tmpl,data),{
+					removeAttributeQuotes: true,
+					removeComments: true,
+				});
 				fs.writeFile('/volumes/var/index.prod.html',
-					ejs.render(tmpl,data),	
+					html,
 					(err)=>{
 						if (err) throw err;
 						console.log("Write: index.prod.html");
