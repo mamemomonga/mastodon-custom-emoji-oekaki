@@ -85,7 +85,7 @@ h1 {
 
 #result {
 	width: 414px;
-	height: 140px;
+	height: 130px;
 	padding: 5px;
 	font-size:12px;
 	background-color:#AAAAAA;
@@ -95,6 +95,14 @@ h1 {
 	padding: 5px;
 	background-color:#666666;
 }
+.cont_ret_ctrl .left {
+	float: left;
+}
+
+.cont_ret_ctrl .right {
+	text-align: right;
+}
+
 .cont_result_count {
 	padding: 5px;
 	height: 18px;
@@ -107,10 +115,32 @@ h1 {
 }
 .cont_right_top {
 	overflow: hidden;
-	height: 18px;
+	height: 20px;
 	padding: 5px;
 	margin: 0px;
 	background-color:#000000;
+	line-height: 20px;
+}
+
+#text_search {
+	width: 100px;
+}
+#bt_search_clear {
+	cursor: pointer;
+}
+
+
+#instance_domain {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.cont_right_top .left {
+	float: left;
+}
+
+.cont_right_top .right {
+	text-align: right;
 }
 
 #instance_domain {

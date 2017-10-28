@@ -7,15 +7,29 @@ let Application=function(args){
 };
 Application.prototype={
 
+	regex_escape: function(str) {
+		return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
+	},
+
 	run: function(args){
 		let t=this;
 		$('.container_main').hide();
 		$('.container_intro').show();
 
-		let wl=window.location.search.substring(1);
-		if(wl) {
-			$('#instance_info_domain').val(wl);
+		// ? を # に変更
+		if(window.location.search) {
+			let l=window.location;
+			let src=l.search;
+			l.href=l.href.replace(new RegExp(t.regex_escape(src)),'')+'#'+src.substring(1);
 		}
+
+		$('#instance_domain').on('click',function() {
+			t.reset();
+		});
+
+		$('#bt_search_clear').on('click',function() {
+			$('#text_search').val("");
+		});
 
 		$('#bt_ret_copy').on('click',function() {
 			$('#result').focus().select();
@@ -33,6 +47,15 @@ Application.prototype={
 			if(!t.emojifetch_active) { t.emojifetch_start() }
 		});
 
+		$('#instance_info_domain').val(window.location.hash.substring(1) || "");
+
+	},
+
+
+	reset: function() {
+		let t=this;
+		$('.container_intro').show();
+		$('.container_main').hide();
 	},
 
 	emojifetch_start: function() {
@@ -57,6 +80,8 @@ Application.prototype={
 
 	emojifetch_success: function(json) {
 		let t=this;
+		$('#instance_info_submit').val("開 始");
+		window.location.hash=t.instance_domain;
 		t.emoji_palette(json);
 		t.tiles();
 		$('#instance_domain').text(t.instance_domain);
@@ -96,6 +121,7 @@ Application.prototype={
 	tiles: function() {
 		let t=this;
 		t.tiles_sc=[];
+		$('#tiles').text('');
 
 		for(let y=0; y<t.height; y++) {
 			let scr=[];
@@ -128,12 +154,13 @@ Application.prototype={
 			}
 			t.result();
 		});
-
-		setInterval(function() { t.search_update() },500);
+		if(t.search_update_interval) { clearInterval(t.search_update_interval); }
+		t.search_update_interval=setInterval(function() { t.search_update() },500);
 	},
 
 	emoji_palette: function(emoji) {
 		let t=this;
+		$('#emoji_palette').text("");
 
 		emoji.sort(function(a,b) {
 			if(a.shortcode < b.shortcode) {

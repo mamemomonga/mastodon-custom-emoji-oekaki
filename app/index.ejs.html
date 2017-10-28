@@ -36,19 +36,34 @@
 <div id="tiles"></div>
 <textarea id="result"></textarea>
 <div class="cont_ret_ctrl">
+<div class="left">
 <input type="button" id="bt_ret_copy" value="コピー"> 
 <input type="button" id="bt_ret_share" value="シェア">
+</div>
+<div class="right">
+<input type="button" id="bt_reset" value="リセット">
+</div>
+<div style="clear: both"></div>
 </div>
 <div class="cont_result_count">文字数: <span id="result_count">0</span></div>
 </div>
 
 <div class="cont_right">
 <div class="cont_right_top">
-<input type="button" id="bt_reset" value="リセット">
-<input type="text" id="text_search" placeholder="検索" size="24">
+
+<div class="left">
 <span id="instance_domain">-</span>
 <span id="selected_shortname">-</span>
 </div>
+
+<div class="right">
+<input type="text" id="text_search" placeholder="フィルタ">
+<span id="bt_search_clear">❎️</span>
+<div style="clear: both"></div>
+</div>
+</div>
+</div>
+
 <div id="emoji_palette"></div>
 </div>
 
