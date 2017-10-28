@@ -105,7 +105,13 @@ h1 {
 }
 .cont_ret_ctrl .left {
 	float: left;
+	vertical-align: middle;
 }
+
+.cont_ret_ctrl .cont_klg_btn {
+	border: 1px solid red;
+}
+
 
 .cont_ret_ctrl .right {
 	text-align: right;

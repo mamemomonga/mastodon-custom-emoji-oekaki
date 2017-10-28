@@ -2,6 +2,7 @@
 
 (function(){
 
+/* Utility */
 let Utility=function(){}
 Utility.prototype={
 	regex_escape: function(str) {
@@ -16,15 +17,97 @@ Utility.prototype={
 	},
 };
 
+/* KillGo */
+let KillGo=function() {
+	this.enable=false;
+	this.shuriken=undefined;
+	this.shuriken_url="";
+};
+KillGo.prototype={
+	set_callback: function(cb) {
+		this.cb=cb;
+	},
+	load: function(emojis_jq) {
+		let t=this;
+		t.killers={};
+		console.log('load killme');
+		$('.cont_ret_ctrl .left .shuriken').text('');
+		emojis_jq.each(function(idx,elm){
+			let sc=elm.dataset.shortcode;
+			let ma=sc.match(/^klg([0-9a-f]{4})$/);
+			if(ma) {
+				if(sc=='klg2640') { t.shuriken_url=elm.src }
+				t.killers[parseInt(ma[1],16)]=sc;
+			}
+		});
+		if(Object.keys(t.killers).length > 0) { t.init() }
+	},
+	init: function() {
+		let t=this;
+		console.log('init killme');
+		t.shuriken=$('<img>',{
+			src: t.shuriken_url,
+			css: {
+				'vertical-align': 'middle',
+				'object-fit': 'contain',
+				'width':  24,
+				'height': 24,
+			}
+		});
+		$('.cont_ret_ctrl .left .shuriken').append(t.shuriken);
+		t.shuriken.on('click',function(e) { t.convert() });
+	},
+
+	convert: function() {
+		let t=this;
+		let lines=$('#result').val().split(/\r\n|\r|\n/);
+		let kmb=[];
+		for(let y=0;y<lines.length;y++) {
+			kmb[y]=t.procline(lines[y]);
+		}
+		t.cb(kmb);
+	},
+
+	procline: function(buf) {
+		let t=this;
+		let p=function(x) { return parseInt(x,16) };
+		let k=function(x) { return t.killers[x] ? t.killers[x] : 'blank' };
+		let kmb=[];
+		for(let chi in buf) {
+			let chr=buf.charCodeAt(chi);
+			// カタカナ
+			if( chr>=p('30a1') && chr<=p('30f6')) {
+				kmb.push(k(chr));
+			// ひらがなはカタカナに
+			} else if( chr>=p('3041') && chr<=p('3093')) {
+				kmb.push(k(chr+96));
+			// スペース
+			} else if (chr == p('0020') || chr == p('3000')) {
+				kmb.push('blank');
+
+			// あうやつを拾う
+			} else if( t.killers[chr] ) {
+				kmb.push(t.killers[chr]);
+			}
+
+		}
+		return kmb;
+	}
+
+};
+
+/* Application */
 let Application=function(args){
 	this.width=11;
 	this.height=11;
 	this.util=new Utility();
+	this.killgo=new KillGo();
 };
 Application.prototype={
 
 	run: function(args){
 		let t=this;
+
 		// ? を # に変更
 		if(window.location.search) {
 			let l=window.location;
@@ -59,10 +142,10 @@ Application.prototype={
 
 		$('#bt_load').on('click',function() { t.tiles_load() });
 
-		$('#btn_left').on('click',function() { t.tiles_move('left') });
+		$('#btn_left').on( 'click',function() { t.tiles_move('left')  });
 		$('#btn_right').on('click',function() { t.tiles_move('right') });
-		$('#btn_up').on('click',function() { t.tiles_move('up') });
-		$('#btn_down').on('click',function() { t.tiles_move('down') });
+		$('#btn_up').on(   'click',function() { t.tiles_move('up')    });
+		$('#btn_down').on( 'click',function() { t.tiles_move('down')  });
 
 		$('#btn_blank').on('click',function() {
 			let sc2elm=t.util.shortcode2elm();
@@ -74,12 +157,26 @@ Application.prototype={
 			if(!t.emojifetch_active) { t.emojifetch_start() }
 		});
 
+		t.killgo.set_callback(function(kmb){
+			t.tiles_reset();
+			for(let y=0; y<t.height; y++) {
+				let tiles=[];
+				if(!kmb[y]) { continue }
+				for(let x=0; x<t.width; x++) {
+					tiles[x]=kmb[y][x] || 'blank';
+				}
+				t.tiles_sc[y]=tiles;
+			}
+			t.tiles_from_sc();
+		});
+
 		let instance_domain=window.location.hash.substring(1) || "";
 		if( instance_domain ) {
 			$('#instance_info_domain').val(instance_domain);
 			if(!t.emojifetch_active) { t.emojifetch_start() }
 			return;
 		}
+
 		t.switch_show_container('intro');
 	},
 
@@ -293,6 +390,8 @@ Application.prototype={
 		$('#emoji_palette img').on('click',function(e) {
 			t.emoji_palette_select(e.target)
 		});
+
+		t.killgo.load($('#emoji_palette img'));
 	},
 
 	emoji_palette_select: function(dom) {
