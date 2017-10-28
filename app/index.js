@@ -7,6 +7,13 @@ Utility.prototype={
 	regex_escape: function(str) {
 		return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
 	},
+	shortcode2elm: function() {
+		let sc2elm={};
+		$('#emoji_palette img').each(function(idx,elm) {
+			sc2elm[elm.dataset.shortcode]=elm;
+		});
+		return sc2elm;
+	},
 };
 
 let Application=function(args){
@@ -51,6 +58,16 @@ Application.prototype={
 		$('#bt_reset').on('click',function() { t.tiles_reset() });
 
 		$('#bt_load').on('click',function() { t.tiles_load() });
+
+		$('#btn_left').on('click',function() { t.tiles_move('left') });
+		$('#btn_right').on('click',function() { t.tiles_move('right') });
+		$('#btn_up').on('click',function() { t.tiles_move('up') });
+		$('#btn_down').on('click',function() { t.tiles_move('down') });
+
+		$('#btn_blank').on('click',function() {
+			let sc2elm=t.util.shortcode2elm();
+			t.emoji_palette_select(sc2elm['blank']);
+		});
 
 		t.emojifetch_active=false;
 		$('#instance_info_submit').on('click',function() {
@@ -108,12 +125,10 @@ Application.prototype={
 	emojifetch_success: function(json) {
 		let t=this;
 		window.location.hash=t.instance_domain;
-		t.switch_show_container('main');
+		$('#instance_domain').text(t.instance_domain);
 		t.emoji_palette(json);
 		t.tiles();
-		$('#instance_domain').text(t.instance_domain);
-		$('.container_intro').hide();
-		$('.container_main').show();
+		t.switch_show_container('main');
 	},
 
 	search_update: function() {
@@ -160,6 +175,28 @@ Application.prototype={
 		t.result();
 	},
 
+	tiles_from_sc:function() {
+		let t=this;
+		let sc2elm=t.util.shortcode2elm();
+		let te=[];
+		for(let y=0; y<t.height; y++) {
+			let tex=[];
+			for(let x=0; x<t.width; x++) { tex[x]=sc2elm[t.tiles_sc[y][x]] }
+			te.push(tex);
+		}
+		t.tiles_update(te);
+	},
+
+	tiles_move(dir) {
+		let t=this;
+		let sc=t.tiles_sc;
+		if(dir=="left") { for(let y in sc) { sc[y].push(sc[y].shift()) }}
+		if(dir=="right"){ for(let y in sc) { sc[y].unshift(sc[y].pop()) }}
+		if(dir=="up")   { sc.push(sc.shift()) }
+		if(dir=="down") { sc.unshift(sc.pop()) }
+		t.tiles_from_sc();
+	},
+
 	tiles: function() {
 		let t=this;
 		t.tiles_sc=[];
@@ -202,12 +239,7 @@ Application.prototype={
 
 	tiles_load: function() {
 		let t=this;
-
-		// shortcode to element
-		let sc2elm={};
-		$('#emoji_palette img').each(function(idx,elm) {
-			sc2elm[elm.dataset.shortcode]=elm;
-		});
+		let sc2elm=t.util.shortcode2elm();
 
 		let ntile=[];
 		let lines=$('#result').val().split(/\r\n|\r|\n/);
@@ -259,16 +291,20 @@ Application.prototype={
 			alert("このインスタンスには :blank: がないため使用できません");
 		}
 		$('#emoji_palette img').on('click',function(e) {
-			let tg=e.target;
-			if (tg == t.selected_idom ) { return; }
-			$('#selected_shortname').text(':'+tg.dataset.shortcode+':');
-			$(tg).css('border','2px solid #FFFFFF');
-			t.selected_idom=tg;
-			if(t.prev_selected_idom) {
-				$(t.prev_selected_idom).css('border','2px solid rgb(57, 63, 79)');
-			}
-			t.prev_selected_idom=tg;
+			t.emoji_palette_select(e.target)
 		});
+	},
+
+	emoji_palette_select: function(dom) {
+		let t=this;
+		if (dom == t.selected_idom ) { return; }
+		$('#selected_shortname').text(':'+dom.dataset.shortcode+':');
+		$(dom).css('border','2px solid #FFFFFF');
+		t.selected_idom=dom;
+		if(t.prev_selected_idom) {
+			$(t.prev_selected_idom).css('border','2px solid rgb(57, 63, 79)');
+		}
+		t.prev_selected_idom=dom;
 	},
 
 	result: function() {

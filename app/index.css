@@ -139,7 +139,6 @@ h1 {
 	font-size: 14px;
 }
 
-
 #instance_domain {
 	font-weight: bold;
 	text-decoration: underline;
@@ -152,6 +151,14 @@ h1 {
 
 .cont_right_top .left {
 	float: left;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.cont_right_top .left .minibt{
+	cursor: pointer;
 }
 
 .cont_right_top .right {
