@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <title>マストドン カスタム絵文字でお絵かきツール</title>
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=430">
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <% if(production) { %>
 <script type="text/javascript" src="./app/jquery-3.2.1.min.js"></script>
 <style type="text/css"><%- css %></style>
@@ -57,11 +58,11 @@
 
 <div class="left">
 
-<span id="btn_blank" class="minibt">🔲</span>
-<span id="btn_left"  class="minibt">⬅️</span>
-<span id="btn_right" class="minibt">➡️</span>
-<span id="btn_up"    class="minibt">⬆️</span>
-<span id="btn_down"  class="minibt">⬇️</span>
+<span id="btn_blank" class="minibt"><i class="fa fa-square fa-x2" aria-hidden="true"></i></span>
+<span id="btn_left"  class="minibt"><i class="fa fa-arrow-circle-left fa-x2" aria-hidden="true"></i></span>
+<span id="btn_right" class="minibt"><i class="fa fa-arrow-circle-right fa-x2" aria-hidden="true"></i></span>
+<span id="btn_up"    class="minibt"><i class="fa fa-arrow-circle-up fa-x2" aria-hidden="true"></i></span>
+<span id="btn_down"  class="minibt"><i class="fa fa-arrow-circle-down fa-x2" aria-hidden="true"></i></span>
 
 <span id="instance_domain">-</span>
 <span id="selected_shortname">-</span>
@@ -69,9 +70,9 @@
 
 <div class="right">
 <input type="text" id="text_search" placeholder="フィルタ">
-<span id="bt_search_clear">❎️</span>
-<div style="clear: both"></div>
+<span id="bt_search_clear"><i class="fa fa-window-close" aria-hidden="true"></i></span>
 </div>
+<div style="clear: both"></div>
 </div>
 </div>
 

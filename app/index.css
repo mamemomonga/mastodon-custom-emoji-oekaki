@@ -132,16 +132,9 @@ h1 {
 	padding: 5px;
 	margin: 0px;
 	background-color:#000000;
-	line-height: 20px;
-}
-
-#text_search {
-	width: 150px;
-}
-#bt_search_clear {
-	cursor: pointer;
-	margin: 0 20px 0 0;
 	font-size: 14px;
+	line-height: 14px;
+	vertical-align: middle;
 }
 
 #instance_domain {
@@ -160,6 +153,8 @@ h1 {
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+	margin: 5px 0 0 5px;
+
 }
 
 .cont_right_top .left .minibt{
@@ -168,6 +163,14 @@ h1 {
 
 .cont_right_top .right {
 	text-align: right;
+}
+
+#text_search {
+	width: 110px;
+}
+#bt_search_clear {
+	cursor: pointer;
+	margin: 0px 10px 0 0;
 }
 
 #instance_domain {
