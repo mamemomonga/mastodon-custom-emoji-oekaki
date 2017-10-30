@@ -192,8 +192,16 @@ h1 {
 }
 
 .bottom {
+	font-size: 10px;
 	padding: 10px;
 	text-align: center;
 	background-color:#222222;
+}
+.bottom .fa {
+	font-size:18px;
+}
+.bottom a {
+	color:#FFFFFF;
+	text-decoration: none;
 }
 

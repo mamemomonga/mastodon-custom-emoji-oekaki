@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>マストドン カスタム絵文字でお絵かきツール</title>
-<meta name="viewport" content="width=426,initial-scale=1">
+<meta name="viewport" content="width=430">
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <% if(production) { %>
@@ -83,13 +83,10 @@
 </div>
 
 <div class="bottom">
-<a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank">GitHub</a> | 
-<a href="https://theboss.tech/@mamemomonga" target="_blank">mamemomonga@theboss.tech</a>
-<% if(production) { %>
- | BUILD: <%= buildnum %>
-<% } %>
+<a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>　
+<a href="https://theboss.tech/@mamemomonga" target="_blank"><i class="fa fa-child" aria-hidden="true"></i></a>
+<% if(production) { %>　#<%= buildnum %> <% } %>
 </div>
-
 
 <% if(production) { %>
 <script type="text/javascript">// <![CDATA[

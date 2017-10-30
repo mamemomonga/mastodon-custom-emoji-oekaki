@@ -3,7 +3,7 @@
 include config.env
 
 define find_build_file
-	$(shell find $1 -type f ! -path $1/build)
+	$(shell find $1 -type f ! -path $1/built)
 endef
 
 define docker_build
@@ -14,20 +14,19 @@ endef
 SHELL=bash
 BUILDNUM=$(shell BN=$$(expr "$$(cat ../BUILDNUM)" + 1); echo $$BN > ../BUILDNUM; echo $$BN)
 
-all: ../index.html
+all: var/ ../index.html
 
-closure-compiler/build: $(call find_build_file, closure-compiler)
+closure-compiler/built: $(call find_build_file, closure-compiler)
 	$(call docker_build, $(DCRIMG_CC), closure-compiler)
 
-nodejs/build: $(call find_build_file, nodejs)
+nodejs/built: $(call find_build_file, nodejs)
 	$(call docker_build, $(DCRIMG_ND), nodejs)
 
 var/:
 	mkdir -p $@
 
 var/index.min.js: \
-	var/ \
-	closure-compiler/build \
+	closure-compiler/built \
 	../app/index.js
 
 	docker run --rm \
@@ -36,8 +35,7 @@ var/index.min.js: \
 		$(DCRIMG_CC)
 
 ../index.html: \
-	var/ \
-	nodejs/build \
+	nodejs/built \
 	var/index.min.js \
 	../app/index.ejs.html \
 	../app/index.css \
@@ -53,6 +51,5 @@ var/index.min.js: \
 
 clean:
 	rm -rf var
-	rm -f ../index.html ../app/index.html closure-compiler/build nodejs/build
-
+	rm -f ../index.html ../app/index.html closure-compiler/built nodejs/built
 

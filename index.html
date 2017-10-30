@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang=ja>
+<head>
+<meta charset=utf-8>
+<title>マストドン カスタム絵文字でお絵かきツール</title>
+<meta name=viewport content="width=430">
+
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css>
+
+<script type=text/javascript src=./app/jquery-3.2.1.min.js></script>
+<style type=text/css>a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;text-align:center;background-color:#000;padding:20px}.container_intro h2{font-size:20px;margin:10px}.container_intro h3{font-size:14px;margin:10px;padding:10px}.container_loading{display:none;text-align:center;background-color:#000;font-size:32px;padding:20px}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:130px;padding:5px;font-size:12px;background-color:#aaa}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_ret_ctrl .left{float:left;vertical-align:middle}.cont_ret_ctrl .cont_klg_btn{border:1px solid red}.cont_ret_ctrl .right{text-align:right}.cont_result_count{padding:5px;height:18px;background-color:#000}.cont_right{background-color:#000}.cont_right_top{overflow:hidden;padding:5px;margin:0;background-color:#000;font-size:14px;line-height:14px;vertical-align:middle}#instance_domain{font-weight:700;text-decoration:underline;cursor:pointer}#selected_shortname{text-decoration:underline;cursor:pointer}.cont_right_top .left{float:left;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;margin:5px 0 0 5px}.cont_right_top .left .minibt{cursor:pointer}.cont_right_top .right{text-align:right}#text_search{width:110px}#bt_search_clear{cursor:pointer;margin:0 10px 0 0}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{font-size:10px;padding:10px;text-align:center;background-color:#222}.bottom .fa{font-size:18px}.bottom a{color:#fff;text-decoration:none}</style>
+
+
+</head>
+<body>
+<h1>マストドン カスタム絵文字でお絵かきツール</h1>
+<div class=container_intro>
+<div class=instance_info>
+<h2>インスタンス</h2>
+<div class=instance_info>
+<input type=text id=instance_info_domain placeholder=mstdn.jp size=24>　
+<input type=submit id=instance_info_submit value=" 開 始 ">
+<br>
+</div>
+<h3>カスタム絵文字APIが使用でき、:blank: 絵文字が定義されている必要があります。</h3>
+</div>
+</div>
+
+<div class=container_loading>
+絵文字情報をロード中...
+</div>
+
+<div class=container_main>
+<div class=cont_left>
+<div id=tiles></div>
+<textarea id=result></textarea>
+<div class=cont_ret_ctrl>
+<div class=left>
+<input type=button id=bt_ret_copy value=コピー> 
+<input type=button id=bt_ret_share value=シェア>
+ | <input type=button id=bt_load value=読み込み>
+<span class=shuriken></span>
+</div>
+<div class=right>
+<input type=button id=bt_reset value=リセット>
+</div>
+<div style="clear: both"></div>
+</div>
+<div class=cont_result_count>文字数: <span id=result_count>0</span></div>
+</div>
+
+<div class=cont_right>
+<div class=cont_right_top>
+
+<div class=left>
+
+<span id=btn_blank class=minibt><i class="fa fa-square fa-x2" aria-hidden=true></i></span>
+<span id=btn_left class=minibt><i class="fa fa-arrow-circle-left fa-x2" aria-hidden=true></i></span>
+<span id=btn_right class=minibt><i class="fa fa-arrow-circle-right fa-x2" aria-hidden=true></i></span>
+<span id=btn_up class=minibt><i class="fa fa-arrow-circle-up fa-x2" aria-hidden=true></i></span>
+<span id=btn_down class=minibt><i class="fa fa-arrow-circle-down fa-x2" aria-hidden=true></i></span>
+
+<span id=instance_domain>-</span>
+<span id=selected_shortname>-</span>
+</div>
+
+<div class=right>
+<input type=text id=text_search placeholder=フィルタ>
+<span id=bt_search_clear><i class="fa fa-window-close" aria-hidden=true></i></span>
+</div>
+<div style="clear: both"></div>
+</div>
+</div>
+
+<div id=emoji_palette></div>
+</div>
+
+<div style=clear:both></div>
+
+
+<div class=bottom>
+<a href=https://github.com/mamemomonga/mastodon-custom-emoji-oekaki target=_blank><i class="fa fa-github" aria-hidden=true></i></a>　
+<a href=https://theboss.tech/@mamemomonga target=_blank><i class="fa fa-child" aria-hidden=true></i></a>
+　#83 
+</div>
+
+
+<script type=text/javascript>// <![CDATA[
+var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.defineProperty=$jscomp.ASSUME_ES5||"function"==typeof Object.defineProperties?Object.defineProperty:function(c,g,f){c!=Array.prototype&&c!=Object.prototype&&(c[g]=f.value)};$jscomp.getGlobal=function(c){return"undefined"!=typeof window&&window===c?c:"undefined"!=typeof global&&null!=global?global:c};$jscomp.global=$jscomp.getGlobal(this);$jscomp.SYMBOL_PREFIX="jscomp_symbol_";
+$jscomp.initSymbol=function(){$jscomp.initSymbol=function(){};$jscomp.global.Symbol||($jscomp.global.Symbol=$jscomp.Symbol)};$jscomp.Symbol=function(){var c=0;return function(g){return $jscomp.SYMBOL_PREFIX+(g||"")+c++}}();
+$jscomp.initSymbolIterator=function(){$jscomp.initSymbol();var c=$jscomp.global.Symbol.iterator;c||(c=$jscomp.global.Symbol.iterator=$jscomp.global.Symbol("iterator"));"function"!=typeof Array.prototype[c]&&$jscomp.defineProperty(Array.prototype,c,{configurable:!0,writable:!0,value:function(){return $jscomp.arrayIterator(this)}});$jscomp.initSymbolIterator=function(){}};$jscomp.arrayIterator=function(c){var g=0;return $jscomp.iteratorPrototype(function(){return g<c.length?{done:!1,value:c[g++]}:{done:!0}})};
+$jscomp.iteratorPrototype=function(c){$jscomp.initSymbolIterator();c={next:c};c[$jscomp.global.Symbol.iterator]=function(){return this};return c};$jscomp.iteratorFromArray=function(c,g){$jscomp.initSymbolIterator();c instanceof String&&(c+="");var f=0,a={next:function(){if(f<c.length){var b=f++;return{value:g(b,c[b]),done:!1}}a.next=function(){return{done:!0,value:void 0}};return a.next()}};a[Symbol.iterator]=function(){return a};return a};
+$jscomp.polyfill=function(c,g,f,a){if(g){f=$jscomp.global;c=c.split(".");for(a=0;a<c.length-1;a++){var b=c[a];b in f||(f[b]={});f=f[b]}c=c[c.length-1];a=f[c];g=g(a);g!=a&&null!=g&&$jscomp.defineProperty(f,c,{configurable:!0,writable:!0,value:g})}};$jscomp.polyfill("Array.prototype.keys",function(c){return c?c:function(){return $jscomp.iteratorFromArray(this,function(c){return c})}},"es6","es3");
+(function(){var c=function(){};c.prototype={regex_escape:function(a){return a.replace(/([.*+?^=!:${}()|[\]\/\\])/g,"\\$1")},shortcode2elm:function(){var a={};$("#emoji_palette img").each(function(b,d){a[d.dataset.shortcode]=d});return a}};var g=function(){this.enable=!1;this.shuriken=void 0;this.shuriken_url=""};g.prototype={set_callback:function(a){this.cb=a},load:function(a){var b=this;b.killers={};$(".cont_ret_ctrl .left .shuriken").text("");a.each(function(a,e){a=e.dataset.shortcode;var d=a.match(/^klg([0-9a-f]{4})$/);
+d&&("klg2640"==a&&(b.shuriken_url=e.src),b.killers[parseInt(d[1],16)]=a)});0<Object.keys(b.killers).length&&b.init()},init:function(){var a=this;console.log("Killme Baby!");a.shuriken=$("<img>",{src:a.shuriken_url,css:{"vertical-align":"middle","object-fit":"contain",width:24,height:24}});$(".cont_ret_ctrl .left .shuriken").append(a.shuriken);a.shuriken.on("click",function(b){a.convert()})},convert:function(){for(var a=$("#result").val().split(/\r\n|\r|\n/),b=[],d=0;d<a.length;d++)b[d]=this.procline(a[d]);
+this.cb(b)},procline:function(a){var b=this,d=function(a){return b.killers[a]?b.killers[a]:"blank"},e=[],c;for(c in a){var k=a.charCodeAt(c);12353<=k&&12435>=k?e.push(d(k+96)):32==k||12288==k?e.push("blank"):b.killers[k]&&e.push(b.killers[k])}return e}};var f=function(a){this.height=this.width=11;this.util=new c;this.killgo=new g};f.prototype={run:function(a){var b=this;if(window.location.search){a=window.location;var d=a.search;a.href=a.href.replace(new RegExp(b.util.regex_escape(d)),"")+"#"+d.substring(1)}$("#instance_domain").on("click",
+function(){b.reset()});$("#selected_shortname").on("click",function(){b.selected_idom&&window.open(b.selected_idom.src)});$("#bt_search_clear").on("click",function(){$("#text_search").val("")});$("#bt_ret_copy").on("click",function(){$("#result").focus().select();document.execCommand("copy")});$("#bt_ret_share").on("click",function(){window.open("https://"+b.instance_domain+"/share?text="+encodeURI($("#result").val()))});$("#bt_reset").on("click",function(){b.tiles_reset()});$("#bt_load").on("click",
+function(){b.tiles_load()});$("#btn_left").on("click",function(){b.tiles_move("left")});$("#btn_right").on("click",function(){b.tiles_move("right")});$("#btn_up").on("click",function(){b.tiles_move("up")});$("#btn_down").on("click",function(){b.tiles_move("down")});$("#btn_blank").on("click",function(){var a=b.util.shortcode2elm();b.emoji_palette_select(a.blank)});b.emojifetch_active=!1;$("#instance_info_submit").on("click",function(){b.emojifetch_active||b.emojifetch_start()});b.killgo.set_callback(function(a){b.tiles_reset();
+for(var d=0;d<b.height;d++){var c=[];if(a[d]){for(var e=0;e<b.width;e++)c[e]=a[d][e]||"blank";b.tiles_sc[d]=c}}b.tiles_from_sc()});(a=window.location.hash.substring(1)||"")?($("#instance_info_domain").val(a),b.emojifetch_active||b.emojifetch_start()):b.switch_show_container("intro")},switch_show_container:function(a){var b=["main","loading","intro"],d;for(d in b){var e=b[d];e==a?$(".container_"+e).show():$(".container_"+e).hide()}},reset:function(){this.switch_show_container("intro")},emojifetch_start:function(){var a=
+this;a.emojifetch_active=!0;a.switch_show_container("loading");a.instance_domain=$("#instance_info_domain").val();$.ajax({type:"GET",url:"https://"+a.instance_domain+"/api/v1/custom_emojis",success:function(b){a.emojifetch_active=!1;a.emojifetch_success(b)},error:function(b,d,e){a.emojifetch_active=!1;a.switch_show_container("intro");alert("取得失敗")}})},emojifetch_success:function(a){window.location.hash=this.instance_domain;$("#instance_domain").text(this.instance_domain);this.emoji_palette(a);this.tiles();
+this.switch_show_container("main")},search_update:function(){var a=$("#text_search").val();a!=this.prev_keyword&&(""==a?$("#emoji_palette img").each(function(a,d){$(d).show()}):$("#emoji_palette img").each(function(b,d){-1!=d.dataset.shortcode.search(a)?$(d).show():$(d).hide()}),this.prev_keyword=a)},tiles_reset:function(){var a=this,b=a.blank_idom.src;$("#tiles img").each(function(d,e){e.src=b;a.tiles_sc[e.dataset.y][e.dataset.x]="blank"});a.result()},tiles_update:function(a){var b=this;b.tiles_reset();
+$("#tiles img").each(function(d,e){d=e.dataset.x;var c=e.dataset.y;a[c]&&a[c][d]&&(d=a[c][d],e.src=d.src,e.dataset.shortcode=d.dataset.shortcode,b.tiles_sc[e.dataset.y][e.dataset.x]=d.dataset.shortcode)});b.result()},tiles_from_sc:function(){for(var a=this.util.shortcode2elm(),b=[],d=0;d<this.height;d++){for(var c=[],h=0;h<this.width;h++)c[h]=a[this.tiles_sc[d][h]];b.push(c)}this.tiles_update(b)},tiles_move:function(a){var b=this.tiles_sc;if("left"==a)for(var d in b)b[d].push(b[d].shift());if("right"==
+a)for(var c in b)b[c].unshift(b[c].pop());"up"==a&&b.push(b.shift());"down"==a&&b.unshift(b.pop());this.tiles_from_sc()},tiles:function(){var a=this;a.tiles_sc=[];$("#tiles").text("");for(var b=0;b<a.height;b++){for(var d=[],c=0;c<a.width;c++){var h=$(a.blank_idom).clone();h.css({border:"2px solid #333333",margin:"1px"});$(h).attr({"data-x":c,"data-y":b});$("#tiles").append(h);d[c]="blank"}$("#tiles").append($("<br>"));a.tiles_sc[b]=d}$("#tiles img").on("click",function(b){b=b.target;var d=b.dataset.x,
+c=b.dataset.y;a.selected_idom&&(b.src==a.selected_idom.src?($(b).attr({src:a.blank_idom.src}),a.tiles_sc[c][d]="blank"):($(b).attr({src:a.selected_idom.src}),a.tiles_sc[c][d]=a.selected_idom.dataset.shortcode),a.result())});a.search_update_interval&&clearInterval(a.search_update_interval);a.search_update_interval=setInterval(function(){a.search_update()},500)},tiles_load:function(){for(var a=this.util.shortcode2elm(),b=[],d=$("#result").val().split(/\r\n|\r|\n/),c=0;c<(d.length>this.height?this.height:
+d.length);c++){for(var h=d[c].split(/\u200B| /),g=[],f=0;f<(h.length>this.width?this.width:h.length);f++){h[f].replace(/^:/,"").replace(/:$/,"");var m=a[h[f].replace(/^:/,"").replace(/:$/,"")];m&&(g[f]=m)}b[c]=g}this.tiles_update(b)},emoji_palette:function(a){var b=this;$("#emoji_palette").text("");a.sort(function(a,b){return a.shortcode<b.shortcode?-1:a.shortcode>b.shortcode?1:0});for(var c=0;c<a.length;c++){var e=$("<img>",{src:a[c].url,"data-shortcode":a[c].shortcode,css:{border:"2px solid rgb(57, 63, 79)",
+"object-fit":"contain",width:32,height:32}});$("#emoji_palette").append(e);"blank"==a[c].shortcode&&(b.blank_idom=e[0])}b.blank_idom||alert("このインスタンスには :blank: がないため使用できません");$("#emoji_palette img").on("click",function(a){b.emoji_palette_select(a.target)});b.killgo.load($("#emoji_palette img"))},emoji_palette_select:function(a){a!=this.selected_idom&&($("#selected_shortname").text(":"+a.dataset.shortcode+":"),$(a).css("border","2px solid #FFFFFF"),this.selected_idom=a,this.prev_selected_idom&&$(this.prev_selected_idom).css("border",
+"2px solid rgb(57, 63, 79)"),this.prev_selected_idom=a)},result:function(){for(var a=[],b=!1,c=this.height-1;0<=c;c--){for(var e=[],g=!1,f=this.width-1;0<=f;f--){var l=":"+this.tiles_sc[c][f]+":";":blank:"!=l&&(g=!0);g&&e.push(l)}0<e.length?b=!0:e.push("​");b&&a.push(e.reverse())}b=[];for(c=a.length-1;0<=c;c--)b.push(a[c].join("​"));a=b.join("\n");b=a.length;c="#000000";500<b&&(c="#FF0000");$(".cont_result_count").css("background-color",c);$("#result_count").text(b);$("#result").val(a)}};window.MstdnCustomEmojiOekaki=
+f})();
+
+// ]]></script>
+
+
+<script type=text/javascript>// <![CDATA[
+$(function(){ new MstdnCustomEmojiOekaki().run(); });
+// ]]></script>
+
+</body>
+</html>
+
