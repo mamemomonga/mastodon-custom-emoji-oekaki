@@ -7,9 +7,9 @@ RUN set -xe && apk --update add tzdata && \
 
 ENV NODE_PATH=/usr/local/lib/node_modules
 RUN set -xe && \
-	npm install -g ejs clean-css html-minifier
+	npm install -g ejs clean-css html-minifier express express-generator
 
 ADD assets /
 
-CMD ["node","/app.js"]
+RUN set -xe && cd /opt/webserver && npm install
 

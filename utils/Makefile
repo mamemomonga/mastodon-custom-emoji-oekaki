@@ -30,7 +30,7 @@ var/index.min.js: \
 	closure-compiler/build \
 	../app/index.js
 
-	docker run -it --rm \
+	docker run --rm \
 		-v $(CURDIR)/../app:/volumes/app:ro \
 		-v $(CURDIR)/var:/volumes/var \
 		$(DCRIMG_CC)
@@ -43,7 +43,7 @@ var/index.min.js: \
 	../app/index.css \
 	../app/reset.css
 
-	docker run -it --rm \
+	docker run --rm \
 		-e BUILDNUM=$(BUILDNUM) \
 		-v $(CURDIR)/../app:/volumes/app:ro \
 		-v $(CURDIR)/var:/volumes/var \
