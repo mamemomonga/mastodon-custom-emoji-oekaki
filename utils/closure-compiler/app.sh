@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eux
+
 java -jar /opt/closure-compiler.jar \
 	--js /volumes/app/index.js \
 	--compilation_level SIMPLE_OPTIMIZATIONS \
