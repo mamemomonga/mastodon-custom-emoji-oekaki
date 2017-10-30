@@ -9,3 +9,4 @@ https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/
 
 * [JQuery](https://jquery.com/)
 * [Font Awesome](http://fontawesome.io/)
+* [reset.css](http://meyerweb.com/eric/tools/css/reset/ )
