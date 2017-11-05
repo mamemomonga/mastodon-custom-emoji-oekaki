@@ -17,77 +17,95 @@ Utility.prototype={
 	},
 };
 
-/* KillGo */
-let KillGo=function() {
-	this.enable=false;
-	this.shuriken=undefined;
-	this.shuriken_url="";
+/* EmojiMoji */
+let EmojiMojis=function(cfg) {
+	let t=this;
+	t.container=$('.cont_ret_ctrl .left .shuriken');
+	t.ems=[];
+	t.cb=function(){}
+	for(let i in cfg) {
+		t.ems[i]=new EmojiMoji(function(r){ t.cb(r) },cfg[i]);
+	}
 };
-KillGo.prototype={
+
+EmojiMojis.prototype={
 	set_callback: function(cb) {
 		this.cb=cb;
 	},
 	load: function(emojis_jq) {
 		let t=this;
-		t.killers={};
-		$('.cont_ret_ctrl .left .shuriken').text('');
+		t.container.text('');
 		emojis_jq.each(function(idx,elm){
 			let sc=elm.dataset.shortcode;
-			let ma=sc.match(/^klg([0-9a-f]{4})$/);
-			if(ma) {
-				if(sc=='klg2640') { t.shuriken_url=elm.src }
-				t.killers[parseInt(ma[1],16)]=sc;
+			for(let i in t.ems) {
+				let em=t.ems[i];
+				let ma=sc.match(em.scm);
+				if(ma) {
+					if(sc==em.icon.sc) { em.icon.url=elm.src }
+					em.emojis[parseInt(ma[1],16)]=sc;
+				}
 			}
 		});
-		if(Object.keys(t.killers).length > 0) { t.init() }
-	},
-	init: function() {
-		let t=this;
-		console.log('Killme Baby!');
-		t.shuriken=$('<img>',{
-			src: t.shuriken_url,
-			css: {
-				'vertical-align': 'middle',
-				'object-fit': 'contain',
-				'width':  24,
-				'height': 24,
+		for(let i in t.ems) {
+			let em=t.ems[i];
+			if(Object.keys(em.emojis).length > 0) {
+				em.icon.jq=$('<img>',{
+					'src': em.icon.url,
+					'css': {
+						'vertical-align': 'middle',
+						'object-fit': 'contain',
+						'width':  24,
+						'height': 24,
+					}
+				});
+				(function(m){
+					m.icon.jq.on('click',function(e) { m.convert() });
+				})(em);
+				t.container.append(em.icon.jq);
 			}
-		});
-		$('.cont_ret_ctrl .left .shuriken').append(t.shuriken);
-		t.shuriken.on('click',function(e) { t.convert() });
-	},
+		}
+	}
+}
 
+let EmojiMoji=function(cb,cfg) {
+	var t=this;
+	t.prefix   = cfg.prefix;
+	t.h2k      = cfg.h2k ? true : false;
+	t.icon     = { sc: cfg.icon, jq: undefined, url: '' };
+	t.scm      = new RegExp('^'+t.prefix+'([0-9a-f]{4})$');
+	t.emojis   = {};
+	t.callback = cb;
+};
+EmojiMoji.prototype={
 	convert: function() {
 		let t=this;
+		// console.log(t);
 		let lines=$('#result').val().split(/\r\n|\r|\n/);
-		let kmb=[];
-		for(let y=0;y<lines.length;y++) {
-			kmb[y]=t.procline(lines[y]);
-		}
-		t.cb(kmb);
-	},
+		let nl=[];
+		for(let y=0; y<lines.length; y++) {
+			let p=function(x) { return parseInt(x,16) };
+			let k=function(x) { return t.emojis[x] ? t.emojis[x] : 'blank' };
+			let emj=[];
+			for(let chi in lines[y]) {
+				t.cb=function(){}
+				let chr=lines[y].charCodeAt(chi);
+				// スペース
+				if (chr == p('0020') || chr == p('3000')) {
+					emj.push('blank');
 
-	procline: function(buf) {
-		let t=this;
-		let p=function(x) { return parseInt(x,16) };
-		let k=function(x) { return t.killers[x] ? t.killers[x] : 'blank' };
-		let kmb=[];
-		for(let chi in buf) {
-			let chr=buf.charCodeAt(chi);
-			// ひらがなはカタカナに
-			if( chr>=p('3041') && chr<=p('3093')) {
-				kmb.push(k(chr+96));
-			// スペース
-			} else if (chr == p('0020') || chr == p('3000')) {
-				kmb.push('blank');
-			// あうやつを拾う
-			} else if( t.killers[chr] ) {
-				kmb.push(t.killers[chr]);
+				// ひらがなはカタカナに
+				} else if ( t.h2k && ( chr>=p('3041') && chr<=p('3093') ) ) {
+					emj.push(k(chr+96));
+
+				// あうやつを拾う
+				} else if( t.emojis[chr] ) {
+					emj.push(t.emojis[chr]);
+				}
 			}
+			nl[y]=emj;
 		}
-		return kmb;
+		t.callback(nl);
 	}
-
 };
 
 /* Application */
@@ -95,7 +113,10 @@ let Application=function(args){
 	this.width=11;
 	this.height=11;
 	this.util=new Utility();
-	this.killgo=new KillGo();
+	this.emojimojis=new EmojiMojis([
+		{ prefix: 'klg', icon: 'klg2640', h2k: true },
+		{ prefix: 'nrk', icon: 'nrk30ca', h2k: true },
+	]);
 };
 Application.prototype={
 
@@ -151,7 +172,8 @@ Application.prototype={
 			if(!t.emojifetch_active) { t.emojifetch_start() }
 		});
 
-		t.killgo.set_callback(function(kmb){
+		// emojimoji
+		t.emojimojis.set_callback(function(kmb){
 			t.tiles_reset();
 			for(let y=0; y<t.height; y++) {
 				let tiles=[];
@@ -385,7 +407,8 @@ Application.prototype={
 			t.emoji_palette_select(e.target)
 		});
 
-		t.killgo.load($('#emoji_palette img'));
+		// emojimoji
+		t.emojimojis.load($('#emoji_palette img'));
 	},
 
 	emoji_palette_select: function(dom) {
