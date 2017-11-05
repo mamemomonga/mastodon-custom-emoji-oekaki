@@ -20,21 +20,26 @@ Utility.prototype={
 /* EmojiMoji */
 let EmojiMojis=function(cfg) {
 	let t=this;
-	t.container=$('.cont_ret_ctrl .left .shuriken');
-	t.ems=[];
+	t.startup_configs=cfg;
 	t.cb=function(){}
-	for(let i in cfg) {
-		t.ems[i]=new EmojiMoji(function(r){ t.cb(r) },cfg[i]);
-	}
+	t.init();
 };
 
 EmojiMojis.prototype={
-	set_callback: function(cb) {
+	init: function() {
+		let t=this;
+		t.container=$('.cont_ret_ctrl .left .shuriken');
+		t.container.empty();
+		t.ems=[];
+		for(let i in t.startup_configs) {
+			t.ems[i]=new EmojiMoji(function(r){ t.cb(r) },t.startup_configs[i]);
+		}
+	},
+	set_apply_callback: function(cb) {
 		this.cb=cb;
 	},
 	load: function(emojis_jq) {
 		let t=this;
-		t.container.text('');
 		emojis_jq.each(function(idx,elm){
 			let sc=elm.dataset.shortcode;
 			for(let i in t.ems) {
@@ -110,8 +115,8 @@ EmojiMoji.prototype={
 
 /* Application */
 let Application=function(args){
-	this.width=11;
-	this.height=11;
+	this.width  = 11;
+	this.height = 11;
 	this.util=new Utility();
 	this.emojimojis=new EmojiMojis([
 		{ prefix: 'klg', icon: 'klg2640', h2k: true },
@@ -132,6 +137,7 @@ Application.prototype={
 
 		$('#instance_domain').on('click',function() {
 			t.reset();
+			t.emojimojis.init();
 		});
 
 		$('#selected_shortname').on('click',function() {
@@ -173,7 +179,7 @@ Application.prototype={
 		});
 
 		// emojimoji
-		t.emojimojis.set_callback(function(kmb){
+		t.emojimojis.set_apply_callback(function(kmb){
 			t.tiles_reset();
 			for(let y=0; y<t.height; y++) {
 				let tiles=[];
