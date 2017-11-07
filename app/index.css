@@ -28,6 +28,11 @@ h1 {
 	padding: 20px;
 }
 
+.container_intro h1 {
+	padding: 20px;
+	margin: 5px 5px 20px 5px;
+}
+
 .container_intro h2 {
 	font-size:20px;
 	margin: 10px;
@@ -45,6 +50,11 @@ h1 {
 	background-color:#000000;
 	font-size: 32px;
 	padding: 20px;
+}
+
+.container_loading h1 {
+	padding: 20px;
+	margin: 5px 5px 20px 5px;
 }
 
 .instance_info {

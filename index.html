@@ -2,19 +2,19 @@
 <html lang=ja>
 <head>
 <meta charset=utf-8>
-<title>マストドン カスタム絵文字でお絵かきツール</title>
+<title>カスタム絵文字でお絵かきツール</title>
 <meta name=viewport content="width=430">
 
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css>
 
 <script type=text/javascript src=./app/jquery-3.2.1.min.js></script>
-<style type=text/css>a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;text-align:center;background-color:#000;padding:20px}.container_intro h2{font-size:20px;margin:10px}.container_intro h3{font-size:14px;margin:10px;padding:10px}.container_loading{display:none;text-align:center;background-color:#000;font-size:32px;padding:20px}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:130px;padding:5px;font-size:12px;background-color:#fff}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_ret_ctrl .left{float:left;vertical-align:middle}.cont_ret_ctrl .cont_klg_btn{border:1px solid red}.cont_ret_ctrl .right{text-align:right}.cont_result_count{padding:5px;height:18px;background-color:#000}.cont_right{background-color:#000}.cont_right_top{overflow:hidden;padding:5px;margin:0;background-color:#000;font-size:14px;line-height:14px;vertical-align:middle}#instance_domain{font-weight:700;text-decoration:underline;cursor:pointer}#selected_shortname{text-decoration:underline;cursor:pointer}.cont_right_top .left{float:left;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;margin:5px 0 0 5px}.cont_right_top .left .minibt{cursor:pointer}.cont_right_top .right{text-align:right}#text_search{width:110px}#bt_search_clear{cursor:pointer;margin:0 10px 0 0}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{font-size:10px;padding:10px;text-align:center;background-color:#222}.bottom .fa{font-size:18px}.bottom a{color:#fff;text-decoration:none}</style>
+<style type=text/css>a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;text-align:center;background-color:#000;padding:20px}.container_intro h1{padding:20px;margin:5px 5px 20px 5px}.container_intro h2{font-size:20px;margin:10px}.container_intro h3{font-size:14px;margin:10px;padding:10px}.container_loading{display:none;text-align:center;background-color:#000;font-size:32px;padding:20px}.container_loading h1{padding:20px;margin:5px 5px 20px 5px}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:130px;padding:5px;font-size:12px;background-color:#fff}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_ret_ctrl .left{float:left;vertical-align:middle}.cont_ret_ctrl .cont_klg_btn{border:1px solid red}.cont_ret_ctrl .right{text-align:right}.cont_result_count{padding:5px;height:18px;background-color:#000}.cont_right{background-color:#000}.cont_right_top{overflow:hidden;padding:5px;margin:0;background-color:#000;font-size:14px;line-height:14px;vertical-align:middle}#instance_domain{font-weight:700;text-decoration:underline;cursor:pointer}#selected_shortname{text-decoration:underline;cursor:pointer}.cont_right_top .left{float:left;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;margin:5px 0 0 5px}.cont_right_top .left .minibt{cursor:pointer}.cont_right_top .right{text-align:right}#text_search{width:110px}#bt_search_clear{cursor:pointer;margin:0 10px 0 0}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{font-size:10px;padding:10px;text-align:center;background-color:#222}.bottom .fa{font-size:18px}.bottom a{color:#fff;text-decoration:none}</style>
 
 
 </head>
 <body>
-<h1>マストドン カスタム絵文字でお絵かきツール</h1>
 <div class=container_intro>
+<h1>カスタム絵文字でお絵かきツール</h1>
 <div class=instance_info>
 <h2>インスタンス</h2>
 <div class=instance_info>
@@ -27,10 +27,12 @@
 </div>
 
 <div class=container_loading>
+<h1>カスタム絵文字でお絵かきツール</h1>
 絵文字情報をロード中...
 </div>
 
 <div class=container_main>
+<h1><span id=instance_domain></span> カスタム絵文字でお絵かきツール</h1>
 <div class=cont_left>
 <div id=tiles></div>
 <textarea id=result></textarea>
@@ -60,7 +62,7 @@
 <span id=btn_up class=minibt><i class="fa fa-arrow-circle-up fa-x2" aria-hidden=true></i></span>
 <span id=btn_down class=minibt><i class="fa fa-arrow-circle-down fa-x2" aria-hidden=true></i></span>
 
-<span id=instance_domain>-</span>
+
 <span id=selected_shortname>-</span>
 </div>
 
@@ -81,7 +83,7 @@
 <div class=bottom>
 <a href=https://github.com/mamemomonga/mastodon-custom-emoji-oekaki target=_blank><i class="fa fa-github" aria-hidden=true></i></a>　
 <a href=https://theboss.tech/@mamemomonga target=_blank><i class="fa fa-child" aria-hidden=true></i></a>
-　#90 
+　#93 
 </div>
 
 
