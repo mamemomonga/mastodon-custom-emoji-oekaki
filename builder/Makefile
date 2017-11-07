@@ -2,54 +2,63 @@
 
 include config.env
 
-define find_build_file
+define FIND_BUILD_FILE
 	$(shell find $1 -type f ! -path $1/built)
 endef
 
-define docker_build
+define DOCKER_BUILD
+	mkdir -p var
 	docker build -t $1 $2
 	touch $@
 endef
 
+define DOCKER_RUN_NODE
+	docker run --rm \
+		-e BUILDNUM=$(BUILDNUM) \
+		-v $(CURDIR)/../app:/volumes/app:ro \
+		-v $(CURDIR)/var:/volumes/var \
+		-v $(CURDIR)/../MANUAL.md:/volumes/MANUAL.md:ro \
+		$(DCRIMG_ND) node /build.js $1
+endef
+
 SHELL=bash
-BUILDNUM=$(shell BN=$$(expr "$$(cat ../BUILDNUM)" + 1); echo $$BN > ../BUILDNUM; echo $$BN)
+BUILDNUM:=$(shell BN=$$(expr "$$(cat ../BUILDNUM)" + 1); echo $$BN > ../BUILDNUM; echo $$BN)
 
-all: var/ ../index.html
+TARGETS=../index.html ../app/index.html ../app/manual.html
+all: $(TARGETS)
 
-closure-compiler/built: $(call find_build_file, closure-compiler)
-	$(call docker_build, $(DCRIMG_CC), closure-compiler)
+../index.html: nodejs/built \
+	var/index.min.js \
+	../app/index.ejs.html \
+	../app/index.css \
+	../app/reset.css
+	$(call DOCKER_RUN_NODE, prod)
+	cp var/index.prod.html $@
 
-nodejs/built: $(call find_build_file, nodejs)
-	$(call docker_build, $(DCRIMG_ND), nodejs)
+../app/index.html: nodejs/built \
+	../app/index.ejs.html
+	$(call DOCKER_RUN_NODE, dev)
+	cp var/index.dev.html $@
 
-var/:
-	mkdir -p $@
+../app/manual.html: nodejs/built \
+	../app/manual.ejs.html
+	$(call DOCKER_RUN_NODE, manual)
+	cp var/manual.html $@
 
-var/index.min.js: \
-	closure-compiler/built \
+var/index.min.js: closure-compiler/built \
 	../app/index.js
-
 	docker run --rm \
 		-v $(CURDIR)/../app:/volumes/app:ro \
 		-v $(CURDIR)/var:/volumes/var \
 		$(DCRIMG_CC)
 
-../index.html: \
-	nodejs/built \
-	var/index.min.js \
-	../app/index.ejs.html \
-	../app/index.css \
-	../app/reset.css
+closure-compiler/built: $(call FIND_BUILD_FILE, closure-compiler)
+	$(call DOCKER_BUILD, $(DCRIMG_CC), closure-compiler)
 
-	docker run --rm \
-		-e BUILDNUM=$(BUILDNUM) \
-		-v $(CURDIR)/../app:/volumes/app:ro \
-		-v $(CURDIR)/var:/volumes/var \
-		$(DCRIMG_ND) node /build.js
-	cp var/index.prod.html ../index.html
-	cp var/index.dev.html ../app/index.html
+nodejs/built: $(call FIND_BUILD_FILE, nodejs)
+	$(call DOCKER_BUILD, $(DCRIMG_ND), nodejs)
+
 
 clean:
-	rm -rf var
-	rm -f ../index.html ../app/index.html closure-compiler/built nodejs/built
+	rm -rf closure-compiler/built nodejs/built var/index.min.js $(TARGETS)
 
