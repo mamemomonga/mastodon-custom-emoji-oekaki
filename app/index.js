@@ -19,7 +19,7 @@ Utility.prototype={
 
 /* EmojiMoji */
 let EmojiMojis=function(cfg) {
-	let t=this;
+	const t=this;
 	t.startup_configs=cfg;
 	t.cb=function(){}
 	t.init();
@@ -27,7 +27,7 @@ let EmojiMojis=function(cfg) {
 
 EmojiMojis.prototype={
 	init: function() {
-		let t=this;
+		const t=this;
 		t.container=$('.cont_ret_ctrl .left .emojimoji_btn');
 		t.container.empty();
 		t.ems=[];
@@ -39,12 +39,12 @@ EmojiMojis.prototype={
 		this.cb=cb;
 	},
 	load: function(emojis_jq) {
-		let t=this;
+		const t=this;
 		emojis_jq.each(function(idx,elm){
-			let sc=elm.dataset.shortcode;
+			const sc=elm.dataset.shortcode;
 			for(let i in t.ems) {
-				let em=t.ems[i];
-				let ma=sc.match(em.scm);
+				const em=t.ems[i];
+				const ma=sc.match(em.re_shortcode);
 				if(ma) {
 					if(sc==em.icon.sc) { em.icon.url=elm.src }
 					em.emojis[parseInt(ma[1],16)]=sc;
@@ -52,7 +52,7 @@ EmojiMojis.prototype={
 			}
 		});
 		for(let i in t.ems) {
-			let em=t.ems[i];
+			const em=t.ems[i];
 			if(Object.keys(em.emojis).length > 0) {
 				em.icon.jq=$('<img>',{
 					'src': em.icon.url,
@@ -73,23 +73,36 @@ EmojiMojis.prototype={
 }
 
 let EmojiMoji=function(cb,cfg) {
-	var t=this;
-	t.prefix   = cfg.prefix;
-	t.h2k      = cfg.h2k ? true : false;
-	t.icon     = { sc: cfg.icon, jq: undefined, url: '' };
-	t.scm      = new RegExp('^'+t.prefix+'([0-9a-f]{4})$');
+	const t=this;
+	t.prefix = cfg.prefix;
+	t.h2k    = cfg.h2k ? true : false;
+	t.icon   = { sc: cfg.icon, jq: undefined, url: '' };
+	t.re_shortcode = new RegExp('^'+t.prefix+'([0-9a-f]{4})$');
+	t.re_emojimoji = new RegExp(':'+t.prefix+'([0-9a-f]{4}):','mg');
+	t.jq_textarea  = $('#result');
 	t.emojis   = {};
 	t.callback = cb;
+	t.text="";
 };
 EmojiMoji.prototype={
 	convert: function() {
-		let t=this;
-		// console.log(t);
-		let lines=$('#result').val().split(/\r\n|\r|\n/);
+		const t=this;
+		t.text=t.jq_textarea.val();
+		t.text.match(t.re_emojimoji) ? t.decode() : t.encode();
+	},
+	decode:function() {
+		const t=this;
+		t.jq_textarea.val( t.text.replace( t.re_emojimoji,(m,p1) => {
+			return String.fromCodePoint(parseInt(p1,16));
+		}));
+	},
+	encode:function() {
+		const t=this;
+		const lines=t.text.split(/\r\n|\r|\n/);
+		const p=function(x) { return parseInt(x,16) };
+		const k=function(x) { return t.emojis[x] ? t.emojis[x] : 'blank' };
 		let nl=[];
 		for(let y=0; y<lines.length; y++) {
-			let p=function(x) { return parseInt(x,16) };
-			let k=function(x) { return t.emojis[x] ? t.emojis[x] : 'blank' };
 			let emj=[];
 			for(let chi in lines[y]) {
 				t.cb=function(){}
@@ -110,7 +123,8 @@ EmojiMoji.prototype={
 			nl[y]=emj;
 		}
 		t.callback(nl);
-	}
+	},
+
 };
 
 /* Application */
@@ -359,7 +373,6 @@ Application.prototype={
 	tiles_load: function() {
 		let t=this;
 		let sc2elm=t.util.shortcode2elm();
-
 		let ntile=[];
 		let lines=$('#result').val().split(/\r\n|\r|\n/);
 		for(let y=0;y < ((lines.length > t.height) ? t.height : lines.length); y++) {
