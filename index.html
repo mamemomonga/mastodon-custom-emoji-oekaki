@@ -39,7 +39,7 @@
 <input type=button id=bt_ret_copy value=コピー> 
 <input type=button id=bt_ret_share value=シェア>
  | <input type=button id=bt_load value=読み込み>
-<span class=shuriken></span>
+<span class=emojimoji_btn></span>
 </div>
 <div class=right>
 <input type=button id=bt_reset value=リセット>
@@ -81,7 +81,7 @@
 <div class=bottom>
 <a href=https://github.com/mamemomonga/mastodon-custom-emoji-oekaki target=_blank><i class="fa fa-github" aria-hidden=true></i></a>　
 <a href=https://theboss.tech/@mamemomonga target=_blank><i class="fa fa-child" aria-hidden=true></i></a>
-　#88 
+　#89 
 </div>
 
 
@@ -91,8 +91,8 @@ $jscomp.initSymbol=function(){$jscomp.initSymbol=function(){};$jscomp.global.Sym
 $jscomp.initSymbolIterator=function(){$jscomp.initSymbol();var c=$jscomp.global.Symbol.iterator;c||(c=$jscomp.global.Symbol.iterator=$jscomp.global.Symbol("iterator"));"function"!=typeof Array.prototype[c]&&$jscomp.defineProperty(Array.prototype,c,{configurable:!0,writable:!0,value:function(){return $jscomp.arrayIterator(this)}});$jscomp.initSymbolIterator=function(){}};$jscomp.arrayIterator=function(c){var d=0;return $jscomp.iteratorPrototype(function(){return d<c.length?{done:!1,value:c[d++]}:{done:!0}})};
 $jscomp.iteratorPrototype=function(c){$jscomp.initSymbolIterator();c={next:c};c[$jscomp.global.Symbol.iterator]=function(){return this};return c};$jscomp.iteratorFromArray=function(c,d){$jscomp.initSymbolIterator();c instanceof String&&(c+="");var g=0,h={next:function(){if(g<c.length){var a=g++;return{value:d(a,c[a]),done:!1}}h.next=function(){return{done:!0,value:void 0}};return h.next()}};h[Symbol.iterator]=function(){return h};return h};
 $jscomp.polyfill=function(c,d,g,h){if(d){g=$jscomp.global;c=c.split(".");for(h=0;h<c.length-1;h++){var a=c[h];a in g||(g[a]={});g=g[a]}c=c[c.length-1];h=g[c];d=d(h);d!=h&&null!=d&&$jscomp.defineProperty(g,c,{configurable:!0,writable:!0,value:d})}};$jscomp.polyfill("Array.prototype.keys",function(c){return c?c:function(){return $jscomp.iteratorFromArray(this,function(c){return c})}},"es6","es3");
-(function(){var c=function(){};c.prototype={regex_escape:function(a){return a.replace(/([.*+?^=!:${}()|[\]\/\\])/g,"\\$1")},shortcode2elm:function(){var a={};$("#emoji_palette img").each(function(b,e){a[e.dataset.shortcode]=e});return a}};var d=function(a){this.startup_configs=a;this.cb=function(){};this.init()};d.prototype={init:function(){var a=this;a.container=$(".cont_ret_ctrl .left .shuriken");a.container.empty();a.ems=[];for(var b in a.startup_configs)a.ems[b]=new g(function(b){a.cb(b)},a.startup_configs[b])},
-set_apply_callback:function(a){this.cb=a},load:function(a){var b=this;a.each(function(a,e){a=e.dataset.shortcode;for(var f in b.ems){var c=b.ems[f],m=a.match(c.scm);m&&(a==c.icon.sc&&(c.icon.url=e.src),c.emojis[parseInt(m[1],16)]=a)}});for(var e in b.ems)a=b.ems[e],0<Object.keys(a.emojis).length&&(a.icon.jq=$("<img>",{src:a.icon.url,css:{"vertical-align":"middle","object-fit":"contain",width:24,height:24}}),function(a){a.icon.jq.on("click",function(b){a.convert()})}(a),b.container.append(a.icon.jq))}};
+(function(){var c=function(){};c.prototype={regex_escape:function(a){return a.replace(/([.*+?^=!:${}()|[\]\/\\])/g,"\\$1")},shortcode2elm:function(){var a={};$("#emoji_palette img").each(function(b,e){a[e.dataset.shortcode]=e});return a}};var d=function(a){this.startup_configs=a;this.cb=function(){};this.init()};d.prototype={init:function(){var a=this;a.container=$(".cont_ret_ctrl .left .emojimoji_btn");a.container.empty();a.ems=[];for(var b in a.startup_configs)a.ems[b]=new g(function(b){a.cb(b)},
+a.startup_configs[b])},set_apply_callback:function(a){this.cb=a},load:function(a){var b=this;a.each(function(a,e){a=e.dataset.shortcode;for(var f in b.ems){var c=b.ems[f],m=a.match(c.scm);m&&(a==c.icon.sc&&(c.icon.url=e.src),c.emojis[parseInt(m[1],16)]=a)}});for(var e in b.ems)a=b.ems[e],0<Object.keys(a.emojis).length&&(a.icon.jq=$("<img>",{src:a.icon.url,css:{"vertical-align":"middle","object-fit":"contain",width:24,height:24}}),function(a){a.icon.jq.on("click",function(b){a.convert()})}(a),b.container.append(a.icon.jq))}};
 var g=function(a,b){this.prefix=b.prefix;this.h2k=b.h2k?!0:!1;this.icon={sc:b.icon,jq:void 0,url:""};this.scm=new RegExp("^"+this.prefix+"([0-9a-f]{4})$");this.emojis={};this.callback=a};g.prototype={convert:function(){for(var a=this,b=$("#result").val().split(/\r\n|\r|\n/),e=[],f=0;f<b.length;f++){var c=function(b){return a.emojis[b]?a.emojis[b]:"blank"},l=[],k;for(k in b[f]){a.cb=function(){};var d=b[f].charCodeAt(k);32==d||12288==d?l.push("blank"):a.h2k&&12353<=d&&12435>=d?l.push(c(d+96)):a.emojis[d]&&
 l.push(a.emojis[d])}e[f]=l}a.callback(e)}};var h=function(a){this.height=this.width=11;this.util=new c;this.emojimojis=new d([{prefix:"klg",icon:"klg2640",h2k:!0},{prefix:"nrk",icon:"nrk30ca",h2k:!0}])};h.prototype={run:function(a){var b=this;if(window.location.search){a=window.location;var e=a.search;a.href=a.href.replace(new RegExp(b.util.regex_escape(e)),"")+"#"+e.substring(1)}$("#instance_domain").on("click",function(){b.reset();b.emojimojis.init()});$("#selected_shortname").on("click",function(){b.selected_idom&&
 window.open(b.selected_idom.src)});$("#bt_search_clear").on("click",function(){$("#text_search").val("")});$("#bt_ret_copy").on("click",function(){$("#result").focus().select();document.execCommand("copy")});$("#bt_ret_share").on("click",function(){window.open("https://"+b.instance_domain+"/share?text="+encodeURI($("#result").val()))});$("#bt_reset").on("click",function(){b.tiles_reset()});$("#bt_load").on("click",function(){b.tiles_load()});$("#btn_left").on("click",function(){b.tiles_move("left")});

@@ -28,7 +28,7 @@ let EmojiMojis=function(cfg) {
 EmojiMojis.prototype={
 	init: function() {
 		let t=this;
-		t.container=$('.cont_ret_ctrl .left .shuriken');
+		t.container=$('.cont_ret_ctrl .left .emojimoji_btn');
 		t.container.empty();
 		t.ems=[];
 		for(let i in t.startup_configs) {
