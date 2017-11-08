@@ -2,11 +2,11 @@
 
 include config.env
 
-define FIND_BUILD_FILE
+define find_build_file
 	$(shell find $1 -type f ! -path $1/built)
 endef
 
-define DOCKER_BUILD
+define docker_build
 	mkdir -p var
 	docker build -t $1 $2
 	touch $@
@@ -52,11 +52,11 @@ var/index.min.js: closure-compiler/built \
 		-v $(CURDIR)/var:/volumes/var \
 		$(DCRIMG_CC)
 
-closure-compiler/built: $(call FIND_BUILD_FILE, closure-compiler)
-	$(call DOCKER_BUILD, $(DCRIMG_CC), closure-compiler)
+closure-compiler/built: $(call find_build_file, closure-compiler)
+	$(call docker_build, $(DCRIMG_CC), closure-compiler)
 
-nodejs/built: $(call FIND_BUILD_FILE, nodejs)
-	$(call DOCKER_BUILD, $(DCRIMG_ND), nodejs)
+nodejs/built: $(call find_build_file, nodejs)
+	$(call docker_build, $(DCRIMG_ND), nodejs)
 
 
 clean:
