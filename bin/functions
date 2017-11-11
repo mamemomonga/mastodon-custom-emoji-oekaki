@@ -1,0 +1,20 @@
+# vim:ft=sh
+
+DCRIMG=node:8.9.1-alpine
+DCRVOL_HOME=emoji-oekaki-dev
+DCRPORT=3000
+DCRRUN_OPT="-p 3000:3000 -v $DCRVOL_HOME:/root -v $BASEDIR/app:/root/app -v $BASEDIR/build:/root/build -w /root/app"
+
+function dcr_prerun {
+
+#	docker build -t $DCRIMG
+
+	if [ -z "$( docker volume ls --filter "name=$DCRVOL_HOME" --format '{{ .Name }}' )" ]; then
+		echo "Creating Volume: $DCRVOL_HOME"
+		docker volume create $DCRVOL_HOME
+	fi
+
+	if [ -z "$BASEDIR/build" ]; then
+		mkdir -p "$BASEDIR/build"
+	fi
+}

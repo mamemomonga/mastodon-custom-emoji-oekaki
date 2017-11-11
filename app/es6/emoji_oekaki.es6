@@ -1,145 +1,19 @@
-'use strict';
+// vim:ft=javascript
+import Utility from './utility.es6'
+import EmojiMojis from './emoji_mojis.es6'
 
-(function(){
-
-/* Utility */
-let Utility=function(){}
-Utility.prototype={
-	regex_escape: function(str) {
-		return str.replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1");
-	},
-	shortcode2elm: function() {
-		let sc2elm={};
-		$('#emoji_palette img').each(function(idx,elm) {
-			sc2elm[elm.dataset.shortcode]=elm;
-		});
-		return sc2elm;
-	},
-};
-
-/* EmojiMoji */
-let EmojiMojis=function(cfg) {
-	const t=this;
-	t.startup_configs=cfg;
-	t.cb=function(){}
-	t.init();
-};
-
-EmojiMojis.prototype={
-	init: function() {
-		const t=this;
-		t.container=$('.cont_ret_ctrl .left .emojimoji_btn');
-		t.container.empty();
-		t.ems=[];
-		for(let i in t.startup_configs) {
-			t.ems[i]=new EmojiMoji(function(r){ t.cb(r) },t.startup_configs[i]);
-		}
-	},
-	set_apply_callback: function(cb) {
-		this.cb=cb;
-	},
-	load: function(emojis_jq) {
-		const t=this;
-		emojis_jq.each(function(idx,elm){
-			const sc=elm.dataset.shortcode;
-			for(let i in t.ems) {
-				const em=t.ems[i];
-				const ma=sc.match(em.re_shortcode);
-				if(ma) {
-					if(sc==em.icon.sc) { em.icon.url=elm.src }
-					em.emojis[parseInt(ma[1],16)]=sc;
-				}
-			}
-		});
-		for(let i in t.ems) {
-			const em=t.ems[i];
-			if(Object.keys(em.emojis).length > 0) {
-				em.icon.jq=$('<img>',{
-					'src': em.icon.url,
-					'css': {
-						'vertical-align': 'middle',
-						'object-fit': 'contain',
-						'width':  24,
-						'height': 24,
-					}
-				});
-				(function(m){
-					m.icon.jq.on('click',function(e) { m.convert() });
-				})(em);
-				t.container.append(em.icon.jq);
-			}
-		}
+export default class EmojiOekaki {
+	constructor(args){
+		this.width  = 11;
+		this.height = 11;
+		this.util=new Utility();
+		this.emojimojis=new EmojiMojis([
+			{ prefix: 'klg', icon: 'klg2640', h2k: true },
+			{ prefix: 'nrk', icon: 'nrk30ca', h2k: true },
+		]);
 	}
-}
 
-let EmojiMoji=function(cb,cfg) {
-	const t=this;
-	t.prefix = cfg.prefix;
-	t.h2k    = cfg.h2k ? true : false;
-	t.icon   = { sc: cfg.icon, jq: undefined, url: '' };
-	t.re_shortcode = new RegExp('^'+t.prefix+'([0-9a-f]{4})$');
-	t.re_emojimoji = new RegExp(':'+t.prefix+'([0-9a-f]{4}):','mg');
-	t.jq_textarea  = $('#result');
-	t.emojis   = {};
-	t.callback = cb;
-	t.text="";
-};
-EmojiMoji.prototype={
-	convert: function() {
-		const t=this;
-		t.text=t.jq_textarea.val();
-		t.text.match(t.re_emojimoji) ? t.decode() : t.encode();
-	},
-	decode:function() {
-		const t=this;
-		t.jq_textarea.val( t.text.replace( t.re_emojimoji,(m,p1) => {
-			return String.fromCodePoint(parseInt(p1,16));
-		}));
-	},
-	encode:function() {
-		const t=this;
-		const lines=t.text.split(/\r\n|\r|\n/);
-		const p=function(x) { return parseInt(x,16) };
-		const k=function(x) { return t.emojis[x] ? t.emojis[x] : 'blank' };
-		let nl=[];
-		for(let y=0; y<lines.length; y++) {
-			let emj=[];
-			for(let chi in lines[y]) {
-				t.cb=function(){}
-				let chr=lines[y].charCodeAt(chi);
-				// スペース
-				if (chr == p('0020') || chr == p('3000')) {
-					emj.push('blank');
-
-				// ひらがなはカタカナに
-				} else if ( t.h2k && ( chr>=p('3041') && chr<=p('3093') ) ) {
-					emj.push(k(chr+96));
-
-				// あうやつを拾う
-				} else if( t.emojis[chr] ) {
-					emj.push(t.emojis[chr]);
-				}
-			}
-			nl[y]=emj;
-		}
-		t.callback(nl);
-	},
-
-};
-
-/* Application */
-let Application=function(args){
-	this.width  = 11;
-	this.height = 11;
-	this.util=new Utility();
-	this.emojimojis=new EmojiMojis([
-		{ prefix: 'klg', icon: 'klg2640', h2k: true },
-		{ prefix: 'nrk', icon: 'nrk30ca', h2k: true },
-	]);
-};
-Application.prototype={
-
-	run: function(args){
+	run(args){
 		let t=this;
 
 		// ? を # に変更
@@ -214,9 +88,8 @@ Application.prototype={
 		}
 
 		t.switch_show_container('intro');
-	},
-
-	switch_show_container: function(container) {
+	}
+	switch_show_container(container) {
 		let t=this;
 		let containers=['main','loading','intro'];
 		for( let c in containers) {
@@ -227,14 +100,12 @@ Application.prototype={
 				$('.container_'+con).hide();
 			}
 		}
-	},
-
-	reset: function() {
+	}
+	reset() {
 		let t=this;
 		t.switch_show_container('intro');
-	},
-
-	emojifetch_start: function() {
+	}
+	emojifetch_start() {
 		let t=this;
 		t.emojifetch_active=true;
 		t.switch_show_container('loading');
@@ -253,18 +124,16 @@ Application.prototype={
 
 			}
 		});
-	},
-
-	emojifetch_success: function(json) {
+	}
+	emojifetch_success(json) {
 		let t=this;
 		window.location.hash=t.instance_domain;
 		$('#instance_domain').text(t.instance_domain);
 		t.emoji_palette(json);
 		t.tiles();
 		t.switch_show_container('main');
-	},
-
-	search_update: function() {
+	}
+	search_update() {
 		let t=this;
 		let keyword=$('#text_search').val();
 		if(keyword != t.prev_keyword) {
@@ -281,9 +150,8 @@ Application.prototype={
 			}
 			t.prev_keyword=keyword;
 		}
-	},	
-
-	tiles_reset: function() {
+	}
+	tiles_reset() {
 		let t=this;
 		let blank_src=t.blank_idom.src;
 		$('#tiles img').each(function(idx,elm) {
@@ -291,9 +159,8 @@ Application.prototype={
 			t.tiles_sc[elm.dataset.y][elm.dataset.x]='blank';
 		});
 		t.result();
-	},
-
-	tiles_update(tile_elms){
+	}
+	tiles_update(tile_elms) {
 		let t=this;
 		t.tiles_reset();
 		$('#tiles img').each(function(idx,elm) {
@@ -306,9 +173,8 @@ Application.prototype={
 			t.tiles_sc[elm.dataset.y][elm.dataset.x]=te.dataset.shortcode;
 		});
 		t.result();
-	},
-
-	tiles_from_sc:function() {
+	}
+	tiles_from_sc(){
 		let t=this;
 		let sc2elm=t.util.shortcode2elm();
 		let te=[];
@@ -318,9 +184,8 @@ Application.prototype={
 			te.push(tex);
 		}
 		t.tiles_update(te);
-	},
-
-	tiles_move(dir) {
+	}
+	tiles_move(dir){
 		let t=this;
 		let sc=t.tiles_sc;
 		if(dir=="left") { for(let y in sc) { sc[y].push(sc[y].shift()) }}
@@ -328,9 +193,8 @@ Application.prototype={
 		if(dir=="up")   { sc.push(sc.shift()) }
 		if(dir=="down") { sc.unshift(sc.pop()) }
 		t.tiles_from_sc();
-	},
-
-	tiles: function() {
+	}
+	tiles(){
 		let t=this;
 		t.tiles_sc=[];
 		$('#tiles').text('');
@@ -368,9 +232,8 @@ Application.prototype={
 		});
 		if(t.search_update_interval) { clearInterval(t.search_update_interval); }
 		t.search_update_interval=setInterval(function() { t.search_update() },500);
-	},
-
-	tiles_load: function() {
+	}
+	tiles_load() {
 		let t=this;
 		let sc2elm=t.util.shortcode2elm();
 		let ntile=[];
@@ -387,9 +250,8 @@ Application.prototype={
 			ntile[y]=ntilex;
 		}
 		t.tiles_update(ntile);
-	},
-
-	emoji_palette: function(emoji) {
+	}
+	emoji_palette(emoji) {
 		let t=this;
 		$('#emoji_palette').text("");
 
@@ -428,9 +290,8 @@ Application.prototype={
 
 		// emojimoji
 		t.emojimojis.load($('#emoji_palette img'));
-	},
-
-	emoji_palette_select: function(dom) {
+	}
+	emoji_palette_select(dom) {
 		let t=this;
 		if (dom == t.selected_idom ) { return; }
 		$('#selected_shortname').text(':'+dom.dataset.shortcode+':');
@@ -440,9 +301,8 @@ Application.prototype={
 			$(t.prev_selected_idom).css('border','2px solid rgb(57, 63, 79)');
 		}
 		t.prev_selected_idom=dom;
-	},
-
-	result: function() {
+	}
+	result() {
 		let t=this;
 		let nr=[];
 		let seen_y=false;
@@ -475,8 +335,5 @@ Application.prototype={
 		$('.cont_result_count').css('background-color',bgcolor);
 		$('#result_count').text(buflen);
 		$('#result').val(buf);
-	},
-
-};
-
-window['MstdnCustomEmojiOekaki']=Application; })();
+	}
+}
