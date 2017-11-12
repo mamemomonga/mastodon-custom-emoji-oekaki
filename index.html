@@ -1,120 +1,99 @@
 <!DOCTYPE html>
-<html lang=ja>
+<html lang="ja">
 <head>
-<meta charset=utf-8>
+<meta charset="utf-8">
 <title>カスタム絵文字でお絵かきツール</title>
-<meta name=viewport content="width=430">
+<meta name="viewport" content="width=430">
 
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css>
 
-<script type=text/javascript src=./app/jquery-3.2.1.min.js></script>
-<style type=text/css>a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#fff;height:100%}a{color:#aaf}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:700}.container_intro{display:none;text-align:center;background-color:#000;padding:20px}.container_intro h1{padding:20px;margin:5px 5px 20px 5px}.container_intro h2{font-size:20px;margin:10px}.container_intro h3{font-size:14px;margin:10px;padding:10px}.container_loading{display:none;text-align:center;background-color:#000;font-size:32px;padding:20px}.container_loading h1{padding:20px;margin:5px 5px 20px 5px}.instance_info{background-color:#000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000;margin:0;padding:0}.container_main{display:none;background-color:#000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:130px;padding:5px;font-size:12px;background-color:#fff}.cont_ret_ctrl{padding:5px;background-color:#666}.cont_ret_ctrl .left{float:left;vertical-align:middle}.cont_ret_ctrl .cont_klg_btn{border:1px solid red}.cont_ret_ctrl .right{text-align:right}.cont_result_count{padding:5px;height:18px;background-color:#000}.cont_right{background-color:#000}.cont_right_top{overflow:hidden;padding:5px;margin:0;background-color:#000;font-size:14px;line-height:14px;vertical-align:middle}#instance_domain{font-weight:700;text-decoration:underline;cursor:pointer}#selected_shortname{text-decoration:underline;cursor:pointer}.cont_right_top .left{float:left;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;margin:5px 0 0 5px}.cont_right_top .left .minibt{cursor:pointer}.cont_right_top .right{text-align:right}#text_search{width:110px}#bt_search_clear{cursor:pointer;margin:0 10px 0 0}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0;overflow-y:scroll;border:2px solid #000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{font-size:10px;padding:10px;text-align:center;background-color:#222}.bottom .fa{font-size:18px}.bottom a{color:#fff;text-decoration:none}</style>
+<link rel="stylesheet" href="./assets/font-awesome/css/font-awesome.min.css">
+<script type="text/javascript" src="./assets/jquery.min.js"></script>
+<style type="text/css">html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}html{height:100%}body{font-size:12px;font-family:sans-serif;background-color:#282c37;color:#FFFFFF;height:100%}a{color:#AAAAFF}h1{background-color:#444b5d;padding:5px;margin:2px;font-size:18px;font-weight:bold}.container_intro{display:none;text-align:center;background-color:#000000;padding:20px}.container_intro h1{padding:20px;margin:5px 5px 20px 5px}.container_intro h2{font-size:20px;margin:10px}.container_intro h3{font-size:14px;margin:10px;padding:10px}.container_loading{display:none;text-align:center;background-color:#000000;font-size:32px;padding:20px}.container_loading h1{padding:20px;margin:5px 5px 20px 5px}.instance_info{background-color:#000000;font-size:12px;vertical-align:middle;text-align:center}#instance_info_domain{font-size:32px;height:38px;width:300px;margin:0px}#instance_info_submit{font-size:28px;width:140px;height:38px;border:1px solid #000000;margin:0px;padding:0px}.container_main{display:none;background-color:#000000}.cont_left{float:left;height:645px}#tiles{width:418px;height:428px;padding:4px 4px 4px 4px;background-color:#393f4f}#tiles img{cursor:pointer}#result{width:414px;height:130px;padding:5px;font-size:12px;background-color:#FFFFFF}.cont_ret_ctrl{padding:5px;background-color:#666666}.cont_ret_ctrl .left{float:left;vertical-align:middle}.cont_ret_ctrl .cont_klg_btn{border:1px solid red}.cont_ret_ctrl .right{text-align:right}.cont_result_count{padding:5px;height:18px;background-color:#000000}.cont_right{background-color:#000000}.cont_right_top{overflow:hidden;padding:5px;margin:0px;background-color:#000000;font-size:14px;line-height:14px;vertical-align:middle}#instance_domain{font-weight:bold;text-decoration:underline;cursor:pointer}#selected_shortname{text-decoration:underline;cursor:pointer}.cont_right_top .left{float:left;user-select:none;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;margin:5px 0 0 5px}.cont_right_top .left .minibt{cursor:pointer}.cont_right_top .right{text-align:right}#text_search{width:110px}#bt_search_clear{cursor:pointer;margin:0px 10px 0 0}#instance_domain{margin:0 5px 0 5px}#selected_shortname{margin:0 5px 0 5px}#emoji_palette{height:600px;padding:5px;margin:0px;overflow-y:scroll;border:2px solid #000000;background-color:#393f4f}#emoji_palette img{cursor:pointer}.bottom{font-size:10px;padding:10px;text-align:center;background-color:#222222}.bottom .fa{font-size:18px}.bottom a{color:#FFFFFF;text-decoration:none}
+</style>
 
 
 </head>
 <body>
-<div class=container_intro>
+<div class="container_intro">
 <h1>カスタム絵文字でお絵かきツール</h1>
-<div class=instance_info>
+<div class="instance_info">
 <h2>インスタンス</h2>
-<div class=instance_info>
-<input type=text id=instance_info_domain placeholder=mstdn.jp size=24>　
-<input type=submit id=instance_info_submit value=" 開 始 ">
+<div class="instance_info">
+<input type="text" id="instance_info_domain" placeholder="mstdn.jp" size="24">　
+<input type="submit" id="instance_info_submit" value=" 開 始 ">
 <br>
 </div>
 <h3>カスタム絵文字APIが使用でき、:blank: 絵文字が定義されている必要があります。</h3>
 </div>
 </div>
 
-<div class=container_loading>
+<div class="container_loading">
 <h1>カスタム絵文字でお絵かきツール</h1>
 絵文字情報をロード中...
 </div>
 
-<div class=container_main>
-<h1><span id=instance_domain></span> カスタム絵文字でお絵かきツール</h1>
-<div class=cont_left>
-<div id=tiles></div>
-<textarea id=result></textarea>
-<div class=cont_ret_ctrl>
-<div class=left>
-<input type=button id=bt_ret_copy value=コピー> 
-<input type=button id=bt_ret_share value=シェア>
- | <input type=button id=bt_load value=読み込み>
-<span class=emojimoji_btn></span>
+<div class="container_main">
+<h1><span id="instance_domain"></span> カスタム絵文字でお絵かきツール</h1>
+<div class="cont_left">
+<div id="tiles"></div>
+<textarea id="result"></textarea>
+<div class="cont_ret_ctrl">
+<div class="left">
+<input type="button" id="bt_ret_copy" value="コピー"> 
+<input type="button" id="bt_ret_share" value="シェア">
+ | <input type="button" id="bt_load" value="読み込み">
+<span class="emojimoji_btn"></span>
 </div>
-<div class=right>
-<input type=button id=bt_reset value=リセット>
-</div>
-<div style="clear: both"></div>
-</div>
-<div class=cont_result_count>文字数: <span id=result_count>0</span></div>
-</div>
-
-<div class=cont_right>
-<div class=cont_right_top>
-
-<div class=left>
-
-<span id=btn_blank class=minibt><i class="fa fa-square fa-x2" aria-hidden=true></i></span>
-<span id=btn_left class=minibt><i class="fa fa-arrow-circle-left fa-x2" aria-hidden=true></i></span>
-<span id=btn_right class=minibt><i class="fa fa-arrow-circle-right fa-x2" aria-hidden=true></i></span>
-<span id=btn_up class=minibt><i class="fa fa-arrow-circle-up fa-x2" aria-hidden=true></i></span>
-<span id=btn_down class=minibt><i class="fa fa-arrow-circle-down fa-x2" aria-hidden=true></i></span>
-
-
-<span id=selected_shortname>-</span>
-</div>
-
-<div class=right>
-<input type=text id=text_search placeholder=フィルタ>
-<span id=bt_search_clear><i class="fa fa-window-close" aria-hidden=true></i></span>
+<div class="right">
+<input type="button" id="bt_reset" value="リセット">
 </div>
 <div style="clear: both"></div>
 </div>
+<div class="cont_result_count">文字数: <span id="result_count">0</span></div>
 </div>
 
-<div id=emoji_palette></div>
+<div class="cont_right">
+<div class="cont_right_top">
+
+<div class="left">
+
+<span id="btn_blank" class="minibt"><i class="fa fa-square fa-x2" aria-hidden="true"></i></span>
+<span id="btn_left"  class="minibt"><i class="fa fa-arrow-circle-left fa-x2" aria-hidden="true"></i></span>
+<span id="btn_right" class="minibt"><i class="fa fa-arrow-circle-right fa-x2" aria-hidden="true"></i></span>
+<span id="btn_up"    class="minibt"><i class="fa fa-arrow-circle-up fa-x2" aria-hidden="true"></i></span>
+<span id="btn_down"  class="minibt"><i class="fa fa-arrow-circle-down fa-x2" aria-hidden="true"></i></span>
+
+
+<span id="selected_shortname">-</span>
 </div>
 
-<div style=clear:both></div>
+<div class="right">
+<input type="text" id="text_search" placeholder="フィルタ">
+<span id="bt_search_clear"><i class="fa fa-window-close" aria-hidden="true"></i></span>
+</div>
+<div style="clear: both"></div>
+</div>
+</div>
 
+<div id="emoji_palette"></div>
+</div>
 
-<div class=bottom>
-<a href=https://github.com/mamemomonga/mastodon-custom-emoji-oekaki target=_blank><i class="fa fa-github" aria-hidden=true></i></a>　
-<a href=https://theboss.tech/@mamemomonga target=_blank><i class="fa fa-child" aria-hidden=true></i></a>
-　#122 
+<div style="clear:both"></div>
+</div>
+
+<div class="bottom">
+<a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>　
+<a href="https://theboss.tech/@mamemomonga" target="_blank"><i class="fa fa-child" aria-hidden="true"></i></a>
+　#97 
 </div>
 
 
-<script type=text/javascript>// <![CDATA[
-var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.defineProperty=$jscomp.ASSUME_ES5||"function"==typeof Object.defineProperties?Object.defineProperty:function(c,h,g){c!=Array.prototype&&c!=Object.prototype&&(c[h]=g.value)};$jscomp.getGlobal=function(c){return"undefined"!=typeof window&&window===c?c:"undefined"!=typeof global&&null!=global?global:c};$jscomp.global=$jscomp.getGlobal(this);$jscomp.SYMBOL_PREFIX="jscomp_symbol_";
-$jscomp.initSymbol=function(){$jscomp.initSymbol=function(){};$jscomp.global.Symbol||($jscomp.global.Symbol=$jscomp.Symbol)};$jscomp.Symbol=function(){var c=0;return function(h){return $jscomp.SYMBOL_PREFIX+(h||"")+c++}}();
-$jscomp.initSymbolIterator=function(){$jscomp.initSymbol();var c=$jscomp.global.Symbol.iterator;c||(c=$jscomp.global.Symbol.iterator=$jscomp.global.Symbol("iterator"));"function"!=typeof Array.prototype[c]&&$jscomp.defineProperty(Array.prototype,c,{configurable:!0,writable:!0,value:function(){return $jscomp.arrayIterator(this)}});$jscomp.initSymbolIterator=function(){}};$jscomp.arrayIterator=function(c){var h=0;return $jscomp.iteratorPrototype(function(){return h<c.length?{done:!1,value:c[h++]}:{done:!0}})};
-$jscomp.iteratorPrototype=function(c){$jscomp.initSymbolIterator();c={next:c};c[$jscomp.global.Symbol.iterator]=function(){return this};return c};$jscomp.iteratorFromArray=function(c,h){$jscomp.initSymbolIterator();c instanceof String&&(c+="");var g=0,f={next:function(){if(g<c.length){var a=g++;return{value:h(a,c[a]),done:!1}}f.next=function(){return{done:!0,value:void 0}};return f.next()}};f[Symbol.iterator]=function(){return f};return f};
-$jscomp.polyfill=function(c,h,g,f){if(h){g=$jscomp.global;c=c.split(".");for(f=0;f<c.length-1;f++){var a=c[f];a in g||(g[a]={});g=g[a]}c=c[c.length-1];f=g[c];h=h(f);h!=f&&null!=h&&$jscomp.defineProperty(g,c,{configurable:!0,writable:!0,value:h})}};$jscomp.polyfill("Array.prototype.keys",function(c){return c?c:function(){return $jscomp.iteratorFromArray(this,function(c){return c})}},"es6","es3");
-$jscomp.polyfill("String.fromCodePoint",function(c){return c?c:function(c){for(var g="",f=0;f<arguments.length;f++){var a=Number(arguments[f]);if(0>a||1114111<a||a!==Math.floor(a))throw new RangeError("invalid_code_point "+a);65535>=a?g+=String.fromCharCode(a):(a-=65536,g+=String.fromCharCode(a>>>10&1023|55296),g+=String.fromCharCode(a&1023|56320))}return g}},"es6","es3");
-(function(){var c=function(){};c.prototype={regex_escape:function(a){return a.replace(/([.*+?^=!:${}()|[\]\/\\])/g,"\\$1")},shortcode2elm:function(){var a={};$("#emoji_palette img").each(function(b,e){a[e.dataset.shortcode]=e});return a}};var h=function(a){this.startup_configs=a;this.cb=function(){};this.init()};h.prototype={init:function(){var a=this;a.container=$(".cont_ret_ctrl .left .emojimoji_btn");a.container.empty();a.ems=[];for(var b in a.startup_configs)a.ems[b]=new g(function(b){a.cb(b)},
-a.startup_configs[b])},set_apply_callback:function(a){this.cb=a},load:function(a){var b=this;a.each(function(a,e){a=e.dataset.shortcode;for(var d in b.ems){var c=b.ems[d],k=a.match(c.re_shortcode);k&&(a==c.icon.sc&&(c.icon.url=e.src),c.emojis[parseInt(k[1],16)]=a)}});for(var e in b.ems)a=b.ems[e],0<Object.keys(a.emojis).length&&(a.icon.jq=$("<img>",{src:a.icon.url,css:{"vertical-align":"middle","object-fit":"contain",width:24,height:24}}),function(a){a.icon.jq.on("click",function(b){a.convert()})}(a),
-b.container.append(a.icon.jq))}};var g=function(a,b){this.prefix=b.prefix;this.h2k=b.h2k?!0:!1;this.icon={sc:b.icon,jq:void 0,url:""};this.re_shortcode=new RegExp("^"+this.prefix+"([0-9a-f]{4})$");this.re_emojimoji=new RegExp(":"+this.prefix+"([0-9a-f]{4}):","mg");this.jq_textarea=$("#result");this.emojis={};this.callback=a;this.text=""};g.prototype={convert:function(){this.text=this.jq_textarea.val();this.text.match(this.re_emojimoji)?this.decode():this.encode()},decode:function(){this.jq_textarea.val(this.text.replace(this.re_emojimoji,
-function(a,b){return String.fromCodePoint(parseInt(b,16))}))},encode:function(){for(var a=this,b=a.text.split(/\r\n|\r|\n/),e=function(b){return a.emojis[b]?a.emojis[b]:"blank"},c=[],k=0;k<b.length;k++){var l=[],g;for(g in b[k]){a.cb=function(){};var f=b[k].charCodeAt(g);32==f||12288==f?l.push("blank"):a.h2k&&12353<=f&&12435>=f?l.push(e(f+96)):a.emojis[f]&&l.push(a.emojis[f])}c[k]=l}a.callback(c)}};var f=function(a){this.height=this.width=11;this.util=new c;this.emojimojis=new h([{prefix:"klg",icon:"klg2640",
-h2k:!0},{prefix:"nrk",icon:"nrk30ca",h2k:!0}])};f.prototype={run:function(a){var b=this;if(window.location.search){a=window.location;var e=a.search;a.href=a.href.replace(new RegExp(b.util.regex_escape(e)),"")+"#"+e.substring(1)}$("#instance_domain").on("click",function(){b.reset();b.emojimojis.init()});$("#selected_shortname").on("click",function(){b.selected_idom&&window.open(b.selected_idom.src)});$("#bt_search_clear").on("click",function(){$("#text_search").val("")});$("#bt_ret_copy").on("click",
-function(){$("#result").focus().select();document.execCommand("copy")});$("#bt_ret_share").on("click",function(){window.open("https://"+b.instance_domain+"/share?text="+encodeURI($("#result").val()))});$("#bt_reset").on("click",function(){b.tiles_reset()});$("#bt_load").on("click",function(){b.tiles_load()});$("#btn_left").on("click",function(){b.tiles_move("left")});$("#btn_right").on("click",function(){b.tiles_move("right")});$("#btn_up").on("click",function(){b.tiles_move("up")});$("#btn_down").on("click",
-function(){b.tiles_move("down")});$("#btn_blank").on("click",function(){var a=b.util.shortcode2elm();b.emoji_palette_select(a.blank)});b.emojifetch_active=!1;$("#instance_info_submit").on("click",function(){b.emojifetch_active||b.emojifetch_start()});b.emojimojis.set_apply_callback(function(a){b.tiles_reset();for(var e=0;e<b.height;e++){var c=[];if(a[e]){for(var d=0;d<b.width;d++)c[d]=a[e][d]||"blank";b.tiles_sc[e]=c}}b.tiles_from_sc()});(a=window.location.hash.substring(1)||"")?($("#instance_info_domain").val(a),
-b.emojifetch_active||b.emojifetch_start()):b.switch_show_container("intro")},switch_show_container:function(a){var b=["main","loading","intro"],e;for(e in b){var c=b[e];c==a?$(".container_"+c).show():$(".container_"+c).hide()}},reset:function(){this.switch_show_container("intro")},emojifetch_start:function(){var a=this;a.emojifetch_active=!0;a.switch_show_container("loading");a.instance_domain=$("#instance_info_domain").val();$.ajax({type:"GET",url:"https://"+a.instance_domain+"/api/v1/custom_emojis",
-success:function(b){a.emojifetch_active=!1;a.emojifetch_success(b)},error:function(b,e,c){a.emojifetch_active=!1;a.switch_show_container("intro");alert("取得失敗")}})},emojifetch_success:function(a){window.location.hash=this.instance_domain;$("#instance_domain").text(this.instance_domain);this.emoji_palette(a);this.tiles();this.switch_show_container("main")},search_update:function(){var a=$("#text_search").val();a!=this.prev_keyword&&(""==a?$("#emoji_palette img").each(function(a,e){$(e).show()}):$("#emoji_palette img").each(function(b,
-e){-1!=e.dataset.shortcode.search(a)?$(e).show():$(e).hide()}),this.prev_keyword=a)},tiles_reset:function(){var a=this,b=a.blank_idom.src;$("#tiles img").each(function(e,c){c.src=b;a.tiles_sc[c.dataset.y][c.dataset.x]="blank"});a.result()},tiles_update:function(a){var b=this;b.tiles_reset();$("#tiles img").each(function(c,d){c=d.dataset.x;var e=d.dataset.y;a[e]&&a[e][c]&&(c=a[e][c],d.src=c.src,d.dataset.shortcode=c.dataset.shortcode,b.tiles_sc[d.dataset.y][d.dataset.x]=c.dataset.shortcode)});b.result()},
-tiles_from_sc:function(){for(var a=this.util.shortcode2elm(),b=[],c=0;c<this.height;c++){for(var d=[],k=0;k<this.width;k++)d[k]=a[this.tiles_sc[c][k]];b.push(d)}this.tiles_update(b)},tiles_move:function(a){var b=this.tiles_sc;if("left"==a)for(var c in b)b[c].push(b[c].shift());if("right"==a)for(var d in b)b[d].unshift(b[d].pop());"up"==a&&b.push(b.shift());"down"==a&&b.unshift(b.pop());this.tiles_from_sc()},tiles:function(){var a=this;a.tiles_sc=[];$("#tiles").text("");for(var b=0;b<a.height;b++){for(var c=
-[],d=0;d<a.width;d++){var k=$(a.blank_idom).clone();k.css({border:"2px solid #333333",margin:"1px"});$(k).attr({"data-x":d,"data-y":b});$("#tiles").append(k);c[d]="blank"}$("#tiles").append($("<br>"));a.tiles_sc[b]=c}$("#tiles img").on("click",function(b){b=b.target;var c=b.dataset.x,e=b.dataset.y;a.selected_idom&&(b.src==a.selected_idom.src?($(b).attr({src:a.blank_idom.src}),a.tiles_sc[e][c]="blank"):($(b).attr({src:a.selected_idom.src}),a.tiles_sc[e][c]=a.selected_idom.dataset.shortcode),a.result())});
-a.search_update_interval&&clearInterval(a.search_update_interval);a.search_update_interval=setInterval(function(){a.search_update()},500)},tiles_load:function(){for(var a=this.util.shortcode2elm(),b=[],c=$("#result").val().split(/\r\n|\r|\n/),d=0;d<(c.length>this.height?this.height:c.length);d++){for(var k=c[d].split(/\u200B| /),f=[],g=0;g<(k.length>this.width?this.width:k.length);g++){k[g].replace(/^:/,"").replace(/:$/,"");var h=a[k[g].replace(/^:/,"").replace(/:$/,"")];h&&(f[g]=h)}b[d]=f}this.tiles_update(b)},
-emoji_palette:function(a){var b=this;$("#emoji_palette").text("");a.sort(function(a,b){return a.shortcode<b.shortcode?-1:a.shortcode>b.shortcode?1:0});for(var c=0;c<a.length;c++){var d=$("<img>",{src:a[c].url,"data-shortcode":a[c].shortcode,css:{border:"2px solid rgb(57, 63, 79)","object-fit":"contain",width:32,height:32}});$("#emoji_palette").append(d);"blank"==a[c].shortcode&&(b.blank_idom=d[0])}b.blank_idom||alert("このインスタンスには :blank: がないため使用できません");$("#emoji_palette img").on("click",function(a){b.emoji_palette_select(a.target)});
-b.emojimojis.load($("#emoji_palette img"))},emoji_palette_select:function(a){a!=this.selected_idom&&($("#selected_shortname").text(":"+a.dataset.shortcode+":"),$(a).css("border","2px solid #FFFFFF"),this.selected_idom=a,this.prev_selected_idom&&$(this.prev_selected_idom).css("border","2px solid rgb(57, 63, 79)"),this.prev_selected_idom=a)},result:function(){for(var a=[],b=!1,c=this.height-1;0<=c;c--){for(var d=[],f=!1,g=this.width-1;0<=g;g--){var h=":"+this.tiles_sc[c][g]+":";":blank:"!=h&&(f=!0);
-f&&d.push(h)}0<d.length?b=!0:d.push("​");b&&a.push(d.reverse())}b=[];for(c=a.length-1;0<=c;c--)b.push(a[c].join("​"));a=b.join("\n");b=a.length;c="#000000";500<b&&(c="#FF0000");$(".cont_result_count").css("background-color",c);$("#result_count").text(b);$("#result").val(a)}};window.MstdnCustomEmojiOekaki=f})();
-
+<script type="text/javascript">// <![CDATA[
+!function(e){function t(i){if(n[i])return n[i].exports;var o=n[i]={i:i,l:!1,exports:{}};return e[i].call(o.exports,o,o.exports,t),o.l=!0,o.exports}var n={};t.m=e,t.c=n,t.d=function(e,n,i){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:i})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=0)}([function(e,t,n){"use strict";var i=function(e){return e&&e.__esModule?e:{default:e}}(n(1));window.MstdnCustomEmojiOekaki=i.default},function(e,t,n){"use strict";function i(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var o=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),r=i(n(2)),a=i(n(3)),c=function(){function e(t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.width=11,this.height=11,this.util=new r.default,this.emojimojis=new a.default([{prefix:"klg",icon:"klg2640",h2k:!0},{prefix:"nrk",icon:"nrk30ca",h2k:!0}])}return o(e,[{key:"run",value:function(e){var t=this;if(window.location.search){var n=window.location,i=n.search;n.href=n.href.replace(new RegExp(t.util.regex_escape(i)),"")+"#"+i.substring(1)}$("#instance_domain").on("click",function(){t.reset(),t.emojimojis.init()}),$("#selected_shortname").on("click",function(){t.selected_idom&&window.open(t.selected_idom.src)}),$("#bt_search_clear").on("click",function(){$("#text_search").val("")}),$("#bt_ret_copy").on("click",function(){$("#result").focus().select(),document.execCommand("copy")}),$("#bt_ret_share").on("click",function(){window.open("https://"+t.instance_domain+"/share?text="+encodeURI($("#result").val()))}),$("#bt_reset").on("click",function(){t.tiles_reset()}),$("#bt_load").on("click",function(){t.tiles_load()}),$("#btn_left").on("click",function(){t.tiles_move("left")}),$("#btn_right").on("click",function(){t.tiles_move("right")}),$("#btn_up").on("click",function(){t.tiles_move("up")}),$("#btn_down").on("click",function(){t.tiles_move("down")}),$("#btn_blank").on("click",function(){var e=t.util.shortcode2elm();t.emoji_palette_select(e.blank)}),t.emojifetch_active=!1,$("#instance_info_submit").on("click",function(){t.emojifetch_active||t.emojifetch_start()}),t.emojimojis.set_apply_callback(function(e){t.tiles_reset();for(var n=0;n<t.height;n++){var i=[];if(e[n]){for(var o=0;o<t.width;o++)i[o]=e[n][o]||"blank";t.tiles_sc[n]=i}}t.tiles_from_sc()});var o=window.location.hash.substring(1)||"";if(o)return $("#instance_info_domain").val(o),void(t.emojifetch_active||t.emojifetch_start());t.switch_show_container("intro")}},{key:"switch_show_container",value:function(e){var t=["main","loading","intro"];for(var n in t){var i=t[n];i==e?$(".container_"+i).show():$(".container_"+i).hide()}}},{key:"reset",value:function(){this.switch_show_container("intro")}},{key:"emojifetch_start",value:function(){var e=this;e.emojifetch_active=!0,e.switch_show_container("loading"),e.instance_domain=$("#instance_info_domain").val(),$.ajax({type:"GET",url:"https://"+e.instance_domain+"/api/v1/custom_emojis",success:function(t){e.emojifetch_active=!1,e.emojifetch_success(t)},error:function(t,n,i){e.emojifetch_active=!1,e.switch_show_container("intro"),alert("取得失敗")}})}},{key:"emojifetch_success",value:function(e){var t=this;window.location.hash=t.instance_domain,$("#instance_domain").text(t.instance_domain),t.emoji_palette(e),t.tiles(),t.switch_show_container("main")}},{key:"search_update",value:function(){var e=this,t=$("#text_search").val();t!=e.prev_keyword&&(""==t?$("#emoji_palette img").each(function(e,t){$(t).show()}):$("#emoji_palette img").each(function(e,n){-1!=n.dataset.shortcode.search(t)?$(n).show():$(n).hide()}),e.prev_keyword=t)}},{key:"tiles_reset",value:function(){var e=this,t=e.blank_idom.src;$("#tiles img").each(function(n,i){i.src=t,e.tiles_sc[i.dataset.y][i.dataset.x]="blank"}),e.result()}},{key:"tiles_update",value:function(e){var t=this;t.tiles_reset(),$("#tiles img").each(function(n,i){var o=i.dataset.x,r=i.dataset.y;if(e[r]&&e[r][o]){var a=e[r][o];i.src=a.src,i.dataset.shortcode=a.dataset.shortcode,t.tiles_sc[i.dataset.y][i.dataset.x]=a.dataset.shortcode}}),t.result()}},{key:"tiles_from_sc",value:function(){for(var e=this,t=e.util.shortcode2elm(),n=[],i=0;i<e.height;i++){for(var o=[],r=0;r<e.width;r++)o[r]=t[e.tiles_sc[i][r]];n.push(o)}e.tiles_update(n)}},{key:"tiles_move",value:function(e){var t=this.tiles_sc;if("left"==e)for(var n in t)t[n].push(t[n].shift());if("right"==e)for(var i in t)t[i].unshift(t[i].pop());"up"==e&&t.push(t.shift()),"down"==e&&t.unshift(t.pop()),this.tiles_from_sc()}},{key:"tiles",value:function(){var e=this;e.tiles_sc=[],$("#tiles").text("");for(var t=0;t<e.height;t++){for(var n=[],i=0;i<e.width;i++){var o=$(e.blank_idom).clone();o.css({border:"2px solid #333333",margin:"1px"}),$(o).attr({"data-x":i,"data-y":t}),$("#tiles").append(o),n[i]="blank"}$("#tiles").append($("<br>")),e.tiles_sc[t]=n}$("#tiles img").on("click",function(t){var n=t.target,i=n.dataset.x,o=n.dataset.y;e.selected_idom&&(n.src==e.selected_idom.src?($(n).attr({src:e.blank_idom.src}),e.tiles_sc[o][i]="blank"):($(n).attr({src:e.selected_idom.src}),e.tiles_sc[o][i]=e.selected_idom.dataset.shortcode),e.result())}),e.search_update_interval&&clearInterval(e.search_update_interval),e.search_update_interval=setInterval(function(){e.search_update()},500)}},{key:"tiles_load",value:function(){for(var e=this,t=e.util.shortcode2elm(),n=[],i=$("#result").val().split(/\r\n|\r|\n/),o=0;o<(i.length>e.height?e.height:i.length);o++){for(var r=i[o].split(/\u200B| /),a=[],c=0;c<(r.length>e.width?e.width:r.length);c++){r[c].replace(/^:/,"").replace(/:$/,"");var s=t[r[c].replace(/^:/,"").replace(/:$/,"")];s&&(a[c]=s)}n[o]=a}e.tiles_update(n)}},{key:"emoji_palette",value:function(e){var t=this;$("#emoji_palette").text(""),e.sort(function(e,t){return e.shortcode<t.shortcode?-1:e.shortcode>t.shortcode?1:0});for(var n=0;n<e.length;n++){var i=$("<img>",{src:e[n].url,"data-shortcode":e[n].shortcode,css:{border:"2px solid rgb(57, 63, 79)","object-fit":"contain",width:32,height:32}});$("#emoji_palette").append(i),"blank"==e[n].shortcode&&(t.blank_idom=i[0])}t.blank_idom||alert("このインスタンスには :blank: がないため使用できません"),$("#emoji_palette img").on("click",function(e){t.emoji_palette_select(e.target)}),t.emojimojis.load($("#emoji_palette img"))}},{key:"emoji_palette_select",value:function(e){var t=this;e!=t.selected_idom&&($("#selected_shortname").text(":"+e.dataset.shortcode+":"),$(e).css("border","2px solid #FFFFFF"),t.selected_idom=e,t.prev_selected_idom&&$(t.prev_selected_idom).css("border","2px solid rgb(57, 63, 79)"),t.prev_selected_idom=e)}},{key:"result",value:function(){for(var e=this,t=[],n=!1,i=e.height-1;i>=0;i--){for(var o=[],r=!1,a=e.width-1;a>=0;a--){var c=":"+e.tiles_sc[i][a]+":";":blank:"!=c&&(r=!0),r&&o.push(c)}o.length>0?n=!0:o.push("​"),n&&t.push(o.reverse())}for(var s=[],l=t.length-1;l>=0;l--)s.push(t[l].join("​"));var u=s.join("\n"),f=u.length,h="#000000";f>500&&(h="#FF0000"),$(".cont_result_count").css("background-color",h),$("#result_count").text(f),$("#result").val(u)}}]),e}();t.default=c},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),o=function(){function e(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e)}return i(e,[{key:"regex_escape",value:function(e){return e.replace(/([.*+?^=!:${}()|[\]\/\\])/g,"\\$1")}},{key:"shortcode2elm",value:function(){var e={};return $("#emoji_palette img").each(function(t,n){e[n.dataset.shortcode]=n}),e}}]),e}();t.default=o},function(e,t,n){"use strict";function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}(),r=function(){function e(t){i(this,e);var n=this;n.startup_configs=t,n.cb=function(){},n.init()}return o(e,[{key:"init",value:function(){var e=this;e.container=$(".cont_ret_ctrl .left .emojimoji_btn"),e.container.empty(),e.ems=[];for(var t in e.startup_configs)e.ems[t]=new a(function(t){e.cb(t)},e.startup_configs[t])}},{key:"set_apply_callback",value:function(e){this.cb=e}},{key:"load",value:function(e){var t=this;e.each(function(e,n){var i=n.dataset.shortcode;for(var o in t.ems){var r=t.ems[o],a=i.match(r.re_shortcode);a&&(i==r.icon.sc&&(r.icon.url=n.src),r.emojis[parseInt(a[1],16)]=i)}});for(var n in t.ems){var i=t.ems[n];Object.keys(i.emojis).length>0&&(i.icon.jq=$("<img>",{src:i.icon.url,css:{"vertical-align":"middle","object-fit":"contain",width:24,height:24}}),function(e){e.icon.jq.on("click",function(t){e.convert()})}(i),t.container.append(i.icon.jq))}}}]),e}();t.default=r;var a=function(){function e(t,n){i(this,e);var o=this;o.prefix=n.prefix,o.h2k=!!n.h2k,o.icon={sc:n.icon,jq:void 0,url:""},o.re_shortcode=new RegExp("^"+o.prefix+"([0-9a-f]{4})$"),o.re_emojimoji=new RegExp(":"+o.prefix+"([0-9a-f]{4}):","mg"),o.jq_textarea=$("#result"),o.emojis={},o.callback=t,o.text=""}return o(e,[{key:"convert",value:function(){var e=this;e.text=e.jq_textarea.val(),e.text.match(e.re_emojimoji)?e.decode():e.encode()}},{key:"decode",value:function(){var e=this;e.jq_textarea.val(e.text.replace(e.re_emojimoji,function(e,t){return String.fromCodePoint(parseInt(t,16))}))}},{key:"encode",value:function(){for(var e=this,t=e.text.split(/\r\n|\r|\n/),n=function(e){return parseInt(e,16)},i=function(t){return e.emojis[t]?e.emojis[t]:"blank"},o=[],r=0;r<t.length;r++){var a=[];for(var c in t[r]){e.cb=function(){};var s=t[r].charCodeAt(c);s==n("0020")||s==n("3000")?a.push("blank"):e.h2k&&s>=n("3041")&&s<=n("3093")?a.push(i(s+96)):e.emojis[s]&&a.push(e.emojis[s])}o[r]=a}e.callback(o)}}]),e}()}]);
 // ]]></script>
 
 
-<script type=text/javascript>// <![CDATA[
+<script type="text/javascript">// <![CDATA[
 $(function(){ new MstdnCustomEmojiOekaki().run(); });
 // ]]></script>
 

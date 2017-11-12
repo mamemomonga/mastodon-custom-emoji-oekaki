@@ -5,10 +5,15 @@
 <title>カスタム絵文字でお絵かきツール</title>
 <meta name="viewport" content="width=430">
 
-<script type="text/javascript" src="./jquery.min.js"></script>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<% if(production) { %>
+<link rel="stylesheet" href="./assets/font-awesome/css/font-awesome.min.css">
+<script type="text/javascript" src="./assets/jquery.min.js"></script>
 <style type="text/css"><%- css %></style>
+<% } else { %>
+<link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
+<script type="text/javascript" src="../assets/jquery.min.js"></script>
+<link rel="stylesheet" href="./main.css">
+<% } %>
 
 </head>
 <body>
@@ -82,12 +87,16 @@
 <div class="bottom">
 <a href="https://github.com/mamemomonga/mastodon-custom-emoji-oekaki" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>　
 <a href="https://theboss.tech/@mamemomonga" target="_blank"><i class="fa fa-child" aria-hidden="true"></i></a>
-　#<%= buildnum %>
+<% if(production) { %>　#<%= buildnum %> <% } %>
 </div>
 
+<% if(production) { %>
 <script type="text/javascript">// <![CDATA[
 <%- js %>
 // ]]></script>
+<% } else { %>
+<script type="text/javascript" src="./app.js"></script>
+<% } %>
 
 <script type="text/javascript">// <![CDATA[
 $(function(){ new MstdnCustomEmojiOekaki().run(); });

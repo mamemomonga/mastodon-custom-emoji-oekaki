@@ -17,23 +17,22 @@
   },
   "homepage": "https://github.com/mamemomonga/mastodon-custom-emoji-oekaki#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
-    "browserify": "^14.5.0",
-    "browserify-css": "^0.13.1",
     "gulp": "^3.9.1",
     "gulp-copy": "^1.0.1",
     "gulp-ejs": "^3.1.0",
     "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.1",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "gulp-webserver": "^0.9.1",
-    "jquery": "^3.2.1",
-    "scssify": "^3.0.1",
-    "uglify-js": "^3.1.9",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "uglifyjs-webpack-plugin": "^1.0.1",
+    "webpack-stream": "^4.0.0"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1"
   }
 }
