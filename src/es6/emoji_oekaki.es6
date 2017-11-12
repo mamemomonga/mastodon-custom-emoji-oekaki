@@ -13,87 +13,91 @@ export default class EmojiOekaki {
 		]);
 	}
 
-	run(args){
-		let t=this;
-
+	init() {
 		// ? を # に変更
 		if(window.location.search) {
-			let l=window.location;
-			let src=l.search;
-			l.href=l.href.replace(new RegExp(t.util.regex_escape(src)),'')+'#'+src.substring(1);
+			const src=window.location.search;
+			window.location.href=window.location.href.replace(
+				new RegExp(this.util.regex_escape(src)),''
+			)+'#'+src.substring(1);
 		}
 
-		$('#instance_domain').on('click',function() {
-			t.reset();
-			t.emojimojis.init();
+		// 絵文字取得中フラグ
+		this.emojifetch_active=false;
+
+		// emojimoji
+		this.emojimojis.set_apply_callback((kmb)=>{
+			this.tiles_reset();
+			for(let y=0; y<this.height; y++) {
+				let tiles=[];
+				if(!kmb[y]) continue;
+				for(let x=0; x<this.width; x++) {
+					tiles[x]=kmb[y][x] || 'blank';
+				}
+				this.tiles_sc[y]=tiles;
+			}
+			this.tiles_from_sc();
 		});
 
-		$('#selected_shortname').on('click',function() {
-			if(t.selected_idom) {
-				window.open(t.selected_idom.src);
+		// イベントリスナー
+		$('#instance_domain').on('click',()=>{
+			this.reset();
+			this.emojimojis.init();
+		});
+
+		$('#selected_shortname').on('click',()=>{
+			if(this.selected_idom) {
+				window.open(this.selected_idom.src);
 			}
 		});
 
-		$('#bt_search_clear').on('click',function() {
+		$('#bt_search_clear').on('click',()=>{
 			$('#text_search').val("");
 		});
 
-		$('#bt_ret_copy').on('click',function() {
+		$('#bt_ret_copy').on('click',()=>{
 			$('#result').focus().select();
 			document.execCommand('copy');
 		});
 
-		$('#bt_ret_share').on('click',function() {
-			window.open('https://'+t.instance_domain+'/share?text='+encodeURI($('#result').val()));
+		$('#bt_ret_share').on('click',()=>{
+			window.open('https://'+this.instance_domain+'/share?text='+encodeURI($('#result').val()));
 		});
 
-		$('#bt_reset').on('click',function() { t.tiles_reset() });
+		$('#bt_reset' ).on( 'click',()=>{ this.tiles_reset()       });
+		$('#bt_load'  ).on( 'click',()=>{ this.tiles_load()        });
+		$('#btn_left' ).on( 'click',()=>{ this.tiles_move('left')  });
+		$('#btn_right').on( 'click',()=>{ this.tiles_move('right') });
+		$('#btn_up'   ).on( 'click',()=>{ this.tiles_move('up')    });
+		$('#btn_down' ).on( 'click',()=>{ this.tiles_move('down')  });
 
-		$('#bt_load').on('click',function() { t.tiles_load() });
-
-		$('#btn_left').on( 'click',function() { t.tiles_move('left')  });
-		$('#btn_right').on('click',function() { t.tiles_move('right') });
-		$('#btn_up').on(   'click',function() { t.tiles_move('up')    });
-		$('#btn_down').on( 'click',function() { t.tiles_move('down')  });
-
-		$('#btn_blank').on('click',function() {
-			let sc2elm=t.util.shortcode2elm();
-			t.emoji_palette_select(sc2elm['blank']);
+		$('#btn_blank').on('click',()=>{
+			this.emoji_palette_select(this.util.shortcode2elm()['blank']);
 		});
 
-		t.emojifetch_active=false;
-		$('#instance_info_submit').on('click',function() {
-			if(!t.emojifetch_active) { t.emojifetch_start() }
+		$('#instance_info_submit').on('click',()=>{
+			if (! this.emojifetch_active ) this.emojifetch_start();
 		});
 
-		// emojimoji
-		t.emojimojis.set_apply_callback(function(kmb){
-			t.tiles_reset();
-			for(let y=0; y<t.height; y++) {
-				let tiles=[];
-				if(!kmb[y]) { continue }
-				for(let x=0; x<t.width; x++) {
-					tiles[x]=kmb[y][x] || 'blank';
-				}
-				t.tiles_sc[y]=tiles;
-			}
-			t.tiles_from_sc();
-		});
+	}
 
-		let instance_domain=window.location.hash.substring(1) || "";
+	run(){
+		this.init();
+
+		// ドメインがhashで指定してあったらロード
+		const instance_domain=window.location.hash.substring(1) || "";
 		if( instance_domain ) {
 			$('#instance_info_domain').val(instance_domain);
-			if(!t.emojifetch_active) { t.emojifetch_start() }
+			if(!this.emojifetch_active) this.emojifetch_start();
 			return;
 		}
-
-		t.switch_show_container('intro');
+		this.switch_show_container('intro');
 	}
+
 	switch_show_container(container) {
-		let t=this;
-		let containers=['main','loading','intro'];
-		for( let c in containers) {
-			let con=containers[c];
+		const containers=['main','loading','intro'];
+		for( let c in containers ) {
+			const con=containers[c];
 			if(con==container) {
 				$('.container_'+con).show();
 			} else {
@@ -101,108 +105,102 @@ export default class EmojiOekaki {
 			}
 		}
 	}
+
 	reset() {
-		let t=this;
-		t.switch_show_container('intro');
+		this.switch_show_container('intro');
 	}
+
 	emojifetch_start() {
-		let t=this;
-		t.emojifetch_active=true;
-		t.switch_show_container('loading');
-		t.instance_domain=$("#instance_info_domain").val();
+		this.emojifetch_active=true;
+		this.switch_show_container('loading');
+		this.instance_domain=$("#instance_info_domain").val();
 		$.ajax({
 			type: 'GET',
-			url: "https://"+t.instance_domain+"/api/v1/custom_emojis",
-			success: function(json) {
-				t.emojifetch_active=false;
-				t.emojifetch_success(json);
+			url: "https://"+this.instance_domain+"/api/v1/custom_emojis",
+			success: (json)=>{
+				this.emojifetch_active=false;
+				this.emojifetch_success(json);
 			},
-			error: function(jqXHR, textStatus, errorThrown){
-				t.emojifetch_active=false;
-				t.switch_show_container('intro');
+			error:(jqXHR, textStatus, errorThrown)=>{
+				this.emojifetch_active=false;
+				this.switch_show_container('intro');
 				alert("取得失敗");
+			}
+		});
+	}
 
-			}
-		});
-	}
 	emojifetch_success(json) {
-		let t=this;
-		window.location.hash=t.instance_domain;
-		$('#instance_domain').text(t.instance_domain);
-		t.emoji_palette(json);
-		t.tiles();
-		t.switch_show_container('main');
+		window.location.hash=this.instance_domain;
+		$('#instance_domain').text(this.instance_domain);
+		this.emoji_palette(json);
+		this.tiles();
+		this.switch_show_container('main');
 	}
+
 	search_update() {
-		let t=this;
-		let keyword=$('#text_search').val();
-		if(keyword != t.prev_keyword) {
-			if(keyword == "") {
-				$('#emoji_palette img').each(function(idx,elm) { $(elm).show() });
-			} else {
-				$('#emoji_palette img').each(function(idx,elm) {
-					if(elm.dataset.shortcode.search(keyword)!=-1) {
-						$(elm).show();
-					} else {
-						$(elm).hide();
-					}
-				});
-			}
-			t.prev_keyword=keyword;
+		const keyword=$('#text_search').val();
+		if(keyword == this.prev_keyword) return;
+		if(keyword == "") {
+			$('#emoji_palette img').each((idx,elm)=>{ $(elm).show() });
+		} else {
+			$('#emoji_palette img').each((idx,elm)=>{
+				( elm.dataset.shortcode.search(keyword)!=-1 ) ? $(elm).show() : $(elm).hide();
+			});
 		}
+		this.prev_keyword=keyword;
 	}
+
 	tiles_reset() {
-		let t=this;
-		let blank_src=t.blank_idom.src;
-		$('#tiles img').each(function(idx,elm) {
+		const blank_src=this.blank_idom.src;
+		$('#tiles img').each((idx,elm)=>{
 			elm.src=blank_src;
-			t.tiles_sc[elm.dataset.y][elm.dataset.x]='blank';
+			this.tiles_sc[elm.dataset.y][elm.dataset.x]='blank';
 		});
-		t.result();
+		this.result();
 	}
+
 	tiles_update(tile_elms) {
-		let t=this;
-		t.tiles_reset();
-		$('#tiles img').each(function(idx,elm) {
-			let x=elm.dataset.x, y=elm.dataset.y;
-			if(!tile_elms[y]) { return }
-			if(!tile_elms[y][x]) { return }
-			let te=tile_elms[y][x];
+		this.tiles_reset();
+		$('#tiles img').each((idx,elm)=>{
+			const x=elm.dataset.x, y=elm.dataset.y;
+			if(!tile_elms[y]) return;
+			if(!tile_elms[y][x]) return;
+			const te=tile_elms[y][x];
 			elm.src=te.src;
 			elm.dataset.shortcode=te.dataset.shortcode;
-			t.tiles_sc[elm.dataset.y][elm.dataset.x]=te.dataset.shortcode;
+			this.tiles_sc[elm.dataset.y][elm.dataset.x]=te.dataset.shortcode;
 		});
-		t.result();
+		this.result();
 	}
+
 	tiles_from_sc(){
-		let t=this;
-		let sc2elm=t.util.shortcode2elm();
+		const sc2elm=this.util.shortcode2elm();
 		let te=[];
-		for(let y=0; y<t.height; y++) {
+		for(let y=0; y<this.height; y++) {
 			let tex=[];
-			for(let x=0; x<t.width; x++) { tex[x]=sc2elm[t.tiles_sc[y][x]] }
+			for(let x=0; x<this.width; x++) { tex[x]=sc2elm[this.tiles_sc[y][x]] }
 			te.push(tex);
 		}
-		t.tiles_update(te);
+		this.tiles_update(te);
 	}
+
 	tiles_move(dir){
-		let t=this;
-		let sc=t.tiles_sc;
+		const sc=this.tiles_sc;
 		if(dir=="left") { for(let y in sc) { sc[y].push(sc[y].shift()) }}
 		if(dir=="right"){ for(let y in sc) { sc[y].unshift(sc[y].pop()) }}
 		if(dir=="up")   { sc.push(sc.shift()) }
 		if(dir=="down") { sc.unshift(sc.pop()) }
-		t.tiles_from_sc();
+		this.tiles_from_sc();
 	}
+
 	tiles(){
-		let t=this;
-		t.tiles_sc=[];
+		this.tiles_sc=[];
 		$('#tiles').text('');
 
-		for(let y=0; y<t.height; y++) {
+		for(let y=0; y<this.height; y++) {
 			let scr=[];
-			for(let x=0; x<t.width; x++) {
-				let blank=$(t.blank_idom).clone();
+			for(let x=0; x<this.width; x++) {
+				const blank=$(this.blank_idom).clone();
 				blank.css({
 					'border':'2px solid #333333',
 					'margin':'1px',
@@ -215,47 +213,46 @@ export default class EmojiOekaki {
 				scr[x]='blank';
 			}
 			$('#tiles').append( $('<br>') );
-			t.tiles_sc[y]=scr;
+			this.tiles_sc[y]=scr;
 		}
-		$('#tiles img').on('click',function(e) {
-			let tg=e.target;
-			let x=tg.dataset.x, y=tg.dataset.y;
-			if(!t.selected_idom) { return }
-			if ( tg.src == t.selected_idom.src ) {
-				$(tg).attr({ src: t.blank_idom.src });
-				t.tiles_sc[y][x]='blank';
+		$('#tiles img').on('click',(e)=>{
+			const tg=e.target;
+			const x=tg.dataset.x, y=tg.dataset.y;
+			if(!this.selected_idom) { return }
+			if ( tg.src == this.selected_idom.src ) {
+				$(tg).attr({ src: this.blank_idom.src });
+				this.tiles_sc[y][x]='blank';
 			} else {
-				$(tg).attr({ src: t.selected_idom.src });
-				t.tiles_sc[y][x]=t.selected_idom.dataset.shortcode;
+				$(tg).attr({ src: this.selected_idom.src });
+				this.tiles_sc[y][x]=this.selected_idom.dataset.shortcode;
 			}
-			t.result();
+			this.result();
 		});
-		if(t.search_update_interval) { clearInterval(t.search_update_interval); }
-		t.search_update_interval=setInterval(function() { t.search_update() },500);
+		if(this.search_update_interval) clearInterval(this.search_update_interval);
+		this.search_update_interval=setInterval(()=>{ this.search_update() },500);
 	}
+
 	tiles_load() {
-		let t=this;
-		let sc2elm=t.util.shortcode2elm();
+		const sc2elm=this.util.shortcode2elm();
+		const lines=$('#result').val().split(/\r\n|\r|\n/);
 		let ntile=[];
-		let lines=$('#result').val().split(/\r\n|\r|\n/);
-		for(let y=0;y < ((lines.length > t.height) ? t.height : lines.length); y++) {
-			let line=lines[y].split(/\u200B| /);
+		for(let y=0;y < ((lines.length > this.height) ? this.height : lines.length); y++) {
+			const line=lines[y].split(/\u200B| /);
 			let ntilex=[];
-			for(let x=0;x< ((line.length > t.width) ? t.width : line.length); x++) {
-				let sc=line[x].replace(/^:/,'').replace(/:$/,'');
+			for(let x=0;x< ((line.length > this.width) ? this.width : line.length); x++) {
 				let elm=sc2elm[line[x].replace(/^:/,'').replace(/:$/,'')];
-				if(!elm) { continue }
+				if(!elm) continue;
 				ntilex[x]=elm;
 			}
 			ntile[y]=ntilex;
 		}
-		t.tiles_update(ntile);
+		this.tiles_update(ntile);
 	}
+
 	emoji_palette(emoji) {
-		let t=this;
 		$('#emoji_palette').text("");
 
-		emoji.sort(function(a,b) {
+		emoji.sort((a,b)=>{
 			if(a.shortcode < b.shortcode) {
 				return -1;
 			} else if (a.shortcode > b.shortcode) {
@@ -265,8 +262,7 @@ export default class EmojiOekaki {
 		});
 
 		for(let i=0;i<emoji.length;i++) {
-		//	console.log(emoji[i]);
-			let ijq=$('<img>',{
+			const ijq=$('<img>',{
 				src: emoji[i].url,
 				'data-shortcode': emoji[i].shortcode,
 				css: {
@@ -277,40 +273,31 @@ export default class EmojiOekaki {
 				},
 			});
 			$('#emoji_palette').append(ijq);
-			if( emoji[i].shortcode == 'blank' ) {
-				t.blank_idom=ijq[0];
-			}
+			if( emoji[i].shortcode == 'blank' ) this.blank_idom=ijq[0];
 		}
-		if(!t.blank_idom) {
-			alert("このインスタンスには :blank: がないため使用できません");
-		}
-		$('#emoji_palette img').on('click',function(e) {
-			t.emoji_palette_select(e.target)
-		});
+		if(!this.blank_idom) alert("このインスタンスには :blank: がないため使用できません");
 
-		// emojimoji
-		t.emojimojis.load($('#emoji_palette img'));
+		$('#emoji_palette img').on('click',(e)=>{ this.emoji_palette_select(e.target) });
+		this.emojimojis.load($('#emoji_palette img'));
 	}
+
 	emoji_palette_select(dom) {
-		let t=this;
-		if (dom == t.selected_idom ) { return; }
+		if (dom == this.selected_idom ) return;
 		$('#selected_shortname').text(':'+dom.dataset.shortcode+':');
 		$(dom).css('border','2px solid #FFFFFF');
-		t.selected_idom=dom;
-		if(t.prev_selected_idom) {
-			$(t.prev_selected_idom).css('border','2px solid rgb(57, 63, 79)');
-		}
-		t.prev_selected_idom=dom;
+		this.selected_idom=dom;
+		if(this.prev_selected_idom) $(this.prev_selected_idom).css('border','2px solid rgb(57, 63, 79)');
+		this.prev_selected_idom=dom;
 	}
+
 	result() {
-		let t=this;
 		let nr=[];
 		let seen_y=false;
-		for(let y=t.height-1;y>=0;y--) {
+		for(let y=this.height-1;y>=0;y--) {
 			let nc=[];
 			let seen_x=false;
-			for(let x=t.width-1;x>=0;x--) {
-				let ts=':'+t.tiles_sc[y][x]+':';
+			for(let x=this.width-1;x>=0;x--) {
+				let ts=':'+this.tiles_sc[y][x]+':';
 				if(ts != ':blank:') { seen_x=true }
 				if(seen_x) { nc.push(ts) }
 			}
@@ -319,21 +306,18 @@ export default class EmojiOekaki {
 			} else {
 				nc.push("\u200B");
 			}
-
-			if(seen_y) {
-				nr.push(nc.reverse());
-			}
+			if(seen_y) nr.push(nc.reverse());
 		}
 		let lines=[];
-		for(let y=nr.length-1;y>=0;y--) {
-			lines.push(nr[y].join("\u200B"));
-		}
-		let buf=lines.join("\n");
-		let buflen=buf.length;
+		for(let y=nr.length-1;y>=0;y--) lines.push(nr[y].join("\u200B"));
+
+		const buf=lines.join("\n");
+		const buflen=buf.length;
 		let bgcolor='#000000';
-		if(buflen > 500) { bgcolor='#FF0000'; }
+		if(buflen > 500) bgcolor='#FF0000';
 		$('.cont_result_count').css('background-color',bgcolor);
 		$('#result_count').text(buflen);
 		$('#result').val(buf);
 	}
+
 }

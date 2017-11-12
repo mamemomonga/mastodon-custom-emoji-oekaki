@@ -70,10 +70,6 @@ gulp.task('font-awesome',() => {
 	.pipe(gulp.dest('./assets'))
 });
 
-
-
-
-
 gulp.task('webserver',() => {
 	return gulp.src('./')
 	.pipe(webserver({
@@ -123,8 +119,8 @@ gulp.task('build', ['sass-prod','es6-prod','assets'],() => {
 // production(自動更新なし)  http://localhost:3000/index.html
 // development(自動更新あり) http://localhost:3000/dev/index.html
 gulp.task('default',['es6-dev','sass-dev','assets','index-dev','manual','webserver'],() => {
-	gulp.watch('./src/es6/*.es6',   ['es6_dev']);
-	gulp.watch('./src/sass/*.scss', ['sass_dev']);
+	gulp.watch('./src/es6/*.es6',   ['es6-dev']);
+	gulp.watch('./src/sass/*.scss', ['sass-dev']);
 	gulp.watch('./src/templates/index.ejs', ['index-dev']);
 	gulp.watch('./src/templates/manual.ejs', ['manual']);
 });
