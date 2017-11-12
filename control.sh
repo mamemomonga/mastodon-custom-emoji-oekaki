@@ -19,6 +19,8 @@ DCRRUN_OPT="\
 	-v $BASEDIR:/home/node/app \
 	-p $DCRPORT:3000"
 
+DCRRUN_USR="docker run -it --rm $DCRRUN_OPT -w /home/node/app -u node $DCRIMG"
+
 if [ -z "$( docker volume ls --filter "name=$DCRVOL_HOME" --format '{{ .Name }}' )" ]; then
 	echo "Creating Docker Volume: $DCRVOL_HOME"
 	docker volume create $DCRVOL_HOME
@@ -26,28 +28,28 @@ fi
 
 case "${1:-}" in
 	"root" )
-		exec docker run -it --rm $DCRRUN_OPT -w /home/node $DCRIMG sh
+		exec docker run -it --rm $DCRRUN_OPT -w /root $DCRIMG sh
 		;;
 
 	"shell" )
-		exec docker run -it --rm $DCRRUN_OPT -w /home/node -u node $DCRIMG sh
+		exec $DCRRUN_USR sh
 		;;
 
 	"install" )
-		exec docker run -it --rm $DCRRUN_OPT -w /home/node/app -u node $DCRIMG npm install
+		exec $DCRRUN_USR npm install
 		;;
 
 	"gulp" )
 		shift
-		exec docker run -it --rm $DCRRUN_OPT -w /home/node/app -u node $DCRIMG npm run gulp ${1:-}
+		exec $DCRRUN_USR npm run gulp ${1:-}
 		;;
 
 	"dev" )
-		exec docker run -it --rm $DCRRUN_OPT -w /home/node/app -u node $DCRIMG npm run gulp
+		exec $DCRRUN_USR npm run gulp
 		;;
 
 	"build" )
-		exec docker run -it --rm $DCRRUN_OPT -w /home/node/app -u node $DCRIMG npm run gulp build
+		exec $DCRRUN_USR npm run gulp build
 		;;
 
 	* )

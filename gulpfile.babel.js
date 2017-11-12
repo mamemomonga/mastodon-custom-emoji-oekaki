@@ -11,6 +11,8 @@ import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
 
 import sass from 'gulp-sass'
 
+import marked from 'marked'
+
 // wabpack設定
 const webpack_config={
 	module: {
@@ -48,10 +50,17 @@ gulp.task('es6-prod', () => { return compile_es6(true)   });
 gulp.task('sass-dev', () => { return compile_sass(false) });
 gulp.task('sass-prod',() => { return compile_sass(true)  });
 
+// assets
+gulp.task('assets',['jquery','font-awesome','marked','github-markdown-css']);
 gulp.task('jquery',() => {
-	return gulp.src('./node_modules/jquery/dist/jquery.min.js')
-		.pipe(gulp.dest('./assets'))
-});
+	return gulp.src('./node_modules/jquery/dist/jquery.min.js').pipe(gulp.dest('./assets'))
+})
+gulp.task('marked',() => {
+	return gulp.src('./node_modules/marked/marked.min.js').pipe(gulp.dest('./assets/'))
+})
+gulp.task('github-markdown-css',() => {
+	return gulp.src('node_modules/github-markdown-css/github-markdown.css').pipe(gulp.dest('./assets'))
+})
 
 gulp.task('font-awesome',() => {
 	return gulp.src([
@@ -60,6 +69,10 @@ gulp.task('font-awesome',() => {
 	],{ base: './node_modules' })
 	.pipe(gulp.dest('./assets'))
 });
+
+
+
+
 
 gulp.task('webserver',() => {
 	return gulp.src('./')
@@ -79,8 +92,14 @@ gulp.task('index-dev',() => {
 	.pipe(gulp.dest('./dev'))
 });
 
+gulp.task('manual',() => {
+	return gulp.src('./src/templates/manual.ejs')
+	.pipe(ejs({},{},{ext:'.html'}))
+	.pipe(gulp.dest('./'))
+});
+
 // buildタスクで統合版HTMLを生成(production)
-gulp.task('build', ['sass-prod','es6-prod','jquery','font-awesome'],() => {
+gulp.task('build', ['sass-prod','es6-prod','assets'],() => {
 	const css = fs.readFileSync('/tmp/main.css');
 	const js  = fs.readFileSync('/tmp/app.js');
 	let buildnum = fs.readFileSync('./BUILDNUM');
@@ -103,9 +122,10 @@ gulp.task('build', ['sass-prod','es6-prod','jquery','font-awesome'],() => {
 // default: 開発用サーバ(development)
 // production(自動更新なし)  http://localhost:3000/index.html
 // development(自動更新あり) http://localhost:3000/dev/index.html
-gulp.task('default',['es6-dev','sass-dev','jquery','font-awesome','index-dev','webserver'],() => {
+gulp.task('default',['es6-dev','sass-dev','assets','index-dev','manual','webserver'],() => {
 	gulp.watch('./src/es6/*.es6',   ['es6_dev']);
 	gulp.watch('./src/sass/*.scss', ['sass_dev']);
 	gulp.watch('./src/templates/index.ejs', ['index-dev']);
+	gulp.watch('./src/templates/manual.ejs', ['manual']);
 });
 
