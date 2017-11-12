@@ -6,7 +6,6 @@
 
 <link rel="stylesheet" href="./assets/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="./assets/github-markdown.css">
-<script type="text/javascript" src="./assets/jquery.min.js"></script>
 <script type="text/javascript" src="./assets/marked.min.js"></script>
 
 <style>
@@ -28,15 +27,17 @@
 </head>
 <body>
 
-<div class="markdown-body"></div>
+<div class="markdown-body" id="content"></div>
 
 </body>
 
 <script type="text/javascript">// <![CDATA[
-$(function(){
-	$.get('./MANUAL.md',function(content) {
-		$('.markdown-body').html( marked( content ));
-	});
+document.addEventListener('DOMContentLoaded',(e)=>{
+	fetch('./MANUAL.md')
+		.then( (r)=>{ return r.text() })
+		.then( (text)=>{
+				document.getElementById('content').innerHTML=marked( text )
+		})
 });
 // ]]></script>
 </html>
