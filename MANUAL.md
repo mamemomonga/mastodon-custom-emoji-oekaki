@@ -1,5 +1,9 @@
 # マストドン カスタム絵文字でお絵かきツール
 
+* [公開場所](https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/)
+* [GitHub](https://github.com/mamemomonga/mastodon-custom-emoji-oekaki)
+* [作った人](https://theboss.tech/@mamemomonga)
+
 マストドンのカスタム絵文字をつかって、お絵かきすることができます。
 
 ## 基本的な使い方
@@ -40,8 +44,4 @@
 ### 文字変換
 
 「キルゴ」と「奈落文字」が登録されているインスタンスではそれっぽいボタンが現れ、文字から絵文字で構成された文字に変換することができます。テキストエリアにカタカナまたはひらがなで文字を入れ、それっぽいボタンを押すと変換されます。また、ショートコードに変換された文字をテキストエリアにペーストしてそれっぽいボタンを押すと、カタカナに戻ります。
-
-# 技術情報
-
-ソースコードは[こちらで公開しています](https://github.com/mamemomonga/mastodon-custom-emoji-oekaki)
 

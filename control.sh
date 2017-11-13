@@ -39,11 +39,6 @@ case "${1:-}" in
 		exec $DCRRUN_USR npm install
 		;;
 
-	"gulp" )
-		shift
-		exec $DCRRUN_USR npm run gulp ${1:-}
-		;;
-
 	"dev" )
 		exec $DCRRUN_USR npm run gulp
 		;;
@@ -53,7 +48,7 @@ case "${1:-}" in
 		;;
 
 	* )
-		echo "USAGE: $0 [ root | shell | install | gulp [args] | dev | build"
+		echo "USAGE: $0 [ root | shell | install | dev | build"
 		exit 1
 		;;
 esac

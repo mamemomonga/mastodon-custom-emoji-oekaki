@@ -1,8 +1,12 @@
+// ------------------------
+// gulpfile.babel.js
+// ------------------------
 
-import fs from 'fs'
 import gulp from 'gulp'
 import gutil from 'gulp-util'
 import webserver from 'gulp-webserver'
+
+import fs from 'fs'
 
 import ejs from 'gulp-ejs'
 
@@ -10,8 +14,6 @@ import webpack from 'webpack-stream'
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
 
 import sass from 'gulp-sass'
-
-import marked from 'marked'
 
 // wabpack設定
 const webpack_config={
@@ -44,24 +46,23 @@ const compile_sass=(production)=>{
 		.pipe( production ? gulp.dest('/tmp') : gulp.dest('./dev'))
 }
 
+// ------------------------
 // タスク
+// ------------------------
+
+// es6
 gulp.task('es6-dev',  () => { return compile_es6(false)  });
 gulp.task('es6-prod', () => { return compile_es6(true)   });
+
+// sass
 gulp.task('sass-dev', () => { return compile_sass(false) });
 gulp.task('sass-prod',() => { return compile_sass(true)  });
 
 // assets
-gulp.task('assets',['jquery','font-awesome','marked','github-markdown-css']);
+gulp.task('assets',['jquery','font-awesome']);
 gulp.task('jquery',() => {
 	return gulp.src('./node_modules/jquery/dist/jquery.min.js').pipe(gulp.dest('./assets'))
 })
-gulp.task('marked',() => {
-	return gulp.src('./node_modules/marked/marked.min.js').pipe(gulp.dest('./assets/'))
-})
-gulp.task('github-markdown-css',() => {
-	return gulp.src('node_modules/github-markdown-css/github-markdown.css').pipe(gulp.dest('./assets'))
-})
-
 gulp.task('font-awesome',() => {
 	return gulp.src([
 		'./node_modules/font-awesome/css/font-awesome.min.css',
@@ -70,16 +71,18 @@ gulp.task('font-awesome',() => {
 	.pipe(gulp.dest('./assets'))
 });
 
+// webserver: 開発用ウェブサーバ
 gulp.task('webserver',() => {
 	return gulp.src('./')
 	.pipe(webserver({
 		liveload: true,
 		directoryListing: true,
-		host: '0.0.0.0',
+		host: '0.0.0.0', // Docker上で動かすので
 		port: 3000
 	}));
 });
 
+// index-dev: 開発用index.html
 gulp.task('index-dev',() => {
 	return gulp.src('./src/templates/index.ejs')
 	.pipe(ejs({
@@ -88,20 +91,13 @@ gulp.task('index-dev',() => {
 	.pipe(gulp.dest('./dev'))
 });
 
-gulp.task('manual',() => {
-	return gulp.src('./src/templates/manual.ejs')
-	.pipe(ejs({},{},{ext:'.html'}))
-	.pipe(gulp.dest('./'))
-});
-
-// buildタスクで統合版HTMLを生成(production)
+// build: 公開版統合HTMLを生成
 gulp.task('build', ['sass-prod','es6-prod','assets'],() => {
 	const css = fs.readFileSync('/tmp/main.css');
 	const js  = fs.readFileSync('/tmp/app.js');
 	let buildnum = fs.readFileSync('./BUILDNUM');
 	buildnum++;
 	gutil.log(`BUILD NUMBER ${buildnum}`);
-
 	return gulp.src('./src/templates/index.ejs')
 		.pipe(ejs({
 			css: css,
@@ -110,18 +106,15 @@ gulp.task('build', ['sass-prod','es6-prod','assets'],() => {
 			buildnum: buildnum,
 		},{},{ ext: '.html' }).on('error', gutil.log))
 		.pipe(gulp.dest('./'))
-	
 	fs.writeFileSync('./BUILDNUM',buildnum)
-
 });
 
-// default: 開発用サーバ(development)
-// production(自動更新なし)  http://localhost:3000/index.html
-// development(自動更新あり) http://localhost:3000/dev/index.html
-gulp.task('default',['es6-dev','sass-dev','assets','index-dev','manual','webserver'],() => {
+// default: 開発環境の実行
+// production(更新監視なし)  http://localhost:3000/index.html
+// development(更新監視あり) http://localhost:3000/dev/index.html
+gulp.task('default',['es6-dev','sass-dev','assets','index-dev','webserver'],() => {
 	gulp.watch('./src/es6/*.es6',   ['es6-dev']);
 	gulp.watch('./src/sass/*.scss', ['sass-dev']);
 	gulp.watch('./src/templates/index.ejs', ['index-dev']);
-	gulp.watch('./src/templates/manual.ejs', ['manual']);
 });
 

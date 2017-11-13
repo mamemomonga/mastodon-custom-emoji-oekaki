@@ -20,7 +20,6 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
-    "babelify": "^8.0.0",
     "gulp": "^3.9.1",
     "gulp-copy": "^1.0.1",
     "gulp-ejs": "^3.1.0",
@@ -33,8 +32,6 @@
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "github-markdown-css": "^2.9.0",
-    "jquery": "^3.2.1",
-    "marked": "^0.3.6"
+    "jquery": "^3.2.1"
   }
 }

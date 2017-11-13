@@ -4,12 +4,17 @@
 
 https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/
 
+# ツールの使い方
+
+[MANUAL.md](./MANUAL.md) をご覧ください。
 
 # 使用ライブラリ
 
 * [JQuery](https://jquery.com/)
 * [Font Awesome](http://fontawesome.io/)
 * [reset.css](http://meyerweb.com/eric/tools/css/reset/ )
-* [marked](https://github.com/chjj/marked)
-* [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
 
+
+# License
+
+* [MIT License](./LICENSE)
