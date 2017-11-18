@@ -77,7 +77,6 @@ gulp.task('webserver',() => {
 	.pipe(webserver({
 		liveload: true,
 		directoryListing: true,
-		host: '0.0.0.0', // Docker上で動かすので
 		port: 3000
 	}));
 });
@@ -98,6 +97,7 @@ gulp.task('build', ['sass-prod','es6-prod','assets'],() => {
 	let buildnum = fs.readFileSync('./BUILDNUM');
 	buildnum++;
 	gutil.log(`BUILD NUMBER ${buildnum}`);
+	fs.writeFileSync('./BUILDNUM',buildnum)
 	return gulp.src('./src/templates/index.ejs')
 		.pipe(ejs({
 			css: css,
@@ -106,7 +106,6 @@ gulp.task('build', ['sass-prod','es6-prod','assets'],() => {
 			buildnum: buildnum,
 		},{},{ ext: '.html' }).on('error', gutil.log))
 		.pipe(gulp.dest('./'))
-	fs.writeFileSync('./BUILDNUM',buildnum)
 });
 
 // default: 開発環境の実行
