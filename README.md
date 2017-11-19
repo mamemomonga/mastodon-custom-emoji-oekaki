@@ -14,6 +14,19 @@ https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/
 * [Font Awesome](http://fontawesome.io/)
 * [reset.css](http://meyerweb.com/eric/tools/css/reset/ )
 
+# ビルド
+
+モジュールインストール
+
+	$ npm install
+
+developmentの実行、http://localhost:3000/var/dev/index.html
+
+	$ npm run dev
+
+productionの実行、http://localhost:3000/index.html
+
+	$ npm run prod
 
 # License
 
