@@ -23,7 +23,7 @@ https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/
 
 モジュールインストール
 
-	$ yarn
+	$ yarn install -D
 
 developmentの実行、http://localhost:3000/var/dev/index.html
 

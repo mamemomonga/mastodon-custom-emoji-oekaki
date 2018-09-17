@@ -6,6 +6,7 @@ import log       from 'fancy-log'
 import webserver from 'gulp-webserver'
 import ejs       from 'gulp-ejs'
 import sass      from 'gulp-sass'
+import htmlmin   from 'gulp-htmlmin'
 import fs        from 'fs'
 import webpack        from 'webpack-stream'
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
@@ -52,14 +53,20 @@ gulp.task('index',()=>{
 		log.info(`BUILD NUMBER ${buildnum}`);
 		fs.writeFileSync('./BUILDNUM',buildnum)
 	}
-	return gulp.src('./src/templates/index.ejs')
+
+	let h = gulp.src('./src/templates/index.ejs')
 	.pipe(ejs({
 		css: css,
 		js: js,
 		buildnum: buildnum,
  		production: production,
 	},{},{ ext: '.html' }).on('error', log))
-	.pipe( gulp.dest( production ? './' : './var/dev') )
+
+	if(production){
+		h=h.pipe(htmlmin({collapseWhitespace: true}))
+	}
+	h.pipe( gulp.dest( production ? './' : './var/dev') )
+	return h
 })
 
 gulp.task('jquery',()=>{
