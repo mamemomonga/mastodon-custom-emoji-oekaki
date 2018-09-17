@@ -4,9 +4,7 @@
   "description": "マストドン カスタム絵文字でお絵かきツール",
   "main": "gulpfile.babel.js",
   "scripts": {
-    "gulp": "gulp",
-    "prod": "gulp production",
-    "dev": "gulp default"
+    "gulp": "node ./node_modules/gulp/bin/gulp.js"
   },
   "repository": {
     "type": "git",
@@ -18,22 +16,33 @@
     "url": "https://github.com/mamemomonga/mastodon-custom-emoji-oekaki/issues"
   },
   "homepage": "https://github.com/mamemomonga/mastodon-custom-emoji-oekaki#readme",
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "8.0"
+          }
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
-    "gulp": "^3.9.1",
-    "gulp-copy": "^1.0.1",
-    "gulp-ejs": "^3.1.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "fancy-log": "^1.3.2",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-ejs": "^3.2.0",
+    "gulp-sass": "^4.0.1",
     "gulp-webserver": "^0.9.1",
-    "uglifyjs-webpack-plugin": "^1.0.1",
-    "webpack-stream": "^4.0.0"
+    "uglifyjs-webpack-plugin": "^2.0.0",
+    "webpack-stream": "^5.1.1"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "jquery": "^3.2.1"
+    "jquery": "^3.3.1"
   }
 }
