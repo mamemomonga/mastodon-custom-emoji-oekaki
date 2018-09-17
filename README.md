@@ -14,19 +14,24 @@ https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/
 * [Font Awesome](http://fontawesome.io/)
 * [reset.css](http://meyerweb.com/eric/tools/css/reset/ )
 
+# 開発環境
+
+* Node v8.11.1
+* yarn 1.5.1
+
 # ビルド
 
 モジュールインストール
 
-	$ npm install
+	$ yarn
 
 developmentの実行、http://localhost:3000/var/dev/index.html
 
-	$ npm run dev
+	$ yarn run gulp
 
 productionの実行、http://localhost:3000/index.html
 
-	$ npm run prod
+	$ yarn run gulp production
 
 # License
 
