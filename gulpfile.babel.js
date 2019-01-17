@@ -1,89 +1,89 @@
 // ------------------------
 // gulpfile.babel.js
 // ------------------------
-import gulp      from 'gulp'
+'use strict'
+import { task, src, dest, series, parallel, watch } from 'gulp'
 import log       from 'fancy-log'
-import webserver from 'gulp-webserver'
 import ejs       from 'gulp-ejs'
 import sass      from 'gulp-sass'
 import htmlmin   from 'gulp-htmlmin'
 import fs        from 'fs'
-import webpack        from 'webpack-stream'
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
+import webpack   from 'webpack-stream'
+import webserver from 'gulp-webserver'
 
-let production=false;
+const PRODUCTION = ( process.env.NODE_ENV === 'production' ) ? true : false
+const ENV_PATH = PRODUCTION ? 'prod': 'dev'
 
 // ------------------------
 // tasks
 // ------------------------
 
-// es6
-gulp.task('es6',()=>{
-	return gulp.src('./src/es6/app.es6')
+// es
+task('es',()=>{
+	return src('./src/es/app.js')
 	.pipe(webpack({
 		output: { filename: 'app.js' },
-		devtool: production ? undefined : 'source-map',
-		plugins: production ? [ new UglifyJSPlugin() ] : undefined,
-		mode: production ? 'production' : 'development',
+		devtool: PRODUCTION ? undefined : 'source-map',
+		mode: PRODUCTION ? 'production' : 'development',
 		module: { rules: [{
-			test: /\.es6$/,
+			test: /\.js$/,
 			use: { loader: 'babel-loader', options: { presets: [
 				[ '@babel/preset-env',{ targets: { browsers: "last 2 versions" }}]
 			]}}
 		}]}
 	}))
-	.pipe( gulp.dest( production ? './var/prod' : './var/dev') );
+	.pipe( dest( `./var/${ENV_PATH}` ))
 })
 
 // sass
-gulp.task('sass',()=>{
-	return gulp.src('./src/sass/*.scss')
-	.pipe(sass({ outputStyle: production ? 'compressed' : 'expanded' })
+task('sass',()=>{
+	return src('./src/sass/*.scss')
+	.pipe(sass({ outputStyle: PRODUCTION ? 'compressed' : 'expanded' })
 	.on('error',sass.logError))
-	.pipe( gulp.dest( production ? './var/prod' : './var/dev') );
+	.pipe( dest( `./var/${ENV_PATH}`))
 })
 
 // index
-gulp.task('index',()=>{
-	const css = production ? fs.readFileSync('./var/prod/main.css') : '';
-	const js  = production ? fs.readFileSync('./var/prod/app.js') : '';
+task('index',()=>{
+	const css = PRODUCTION ? fs.readFileSync(`./var/${ENV_PATH}/main.css`) : '';
+	const js  = PRODUCTION ? fs.readFileSync(`./var/${ENV_PATH}/app.js`) : '';
 	let buildnum = fs.readFileSync('./BUILDNUM');
-	if(production) {
+	if(PRODUCTION) {
 		buildnum++;
 		log.info(`BUILD NUMBER ${buildnum}`);
 		fs.writeFileSync('./BUILDNUM',buildnum)
 	}
 
-	let h = gulp.src('./src/templates/index.ejs')
+	let h = src('./src/templates/index.ejs')
 	.pipe(ejs({
 		css: css,
 		js: js,
 		buildnum: buildnum,
- 		production: production,
+ 		production: PRODUCTION,
 	},{},{ ext: '.html' }).on('error', log))
 
-	if(production){
+	if(PRODUCTION){
 		h=h.pipe(htmlmin({collapseWhitespace: true}))
 	}
-	h.pipe( gulp.dest( production ? './' : './var/dev') )
+	h.pipe( dest( PRODUCTION ? './' : './var/dev') )
 	return h
 })
 
-gulp.task('jquery',()=>{
-	return gulp.src('./node_modules/jquery/dist/jquery.min.js').pipe(gulp.dest('./assets'))
+task('jquery',()=>{
+	return src('./node_modules/jquery/dist/jquery.min.js').pipe(dest('./assets'))
 })
 
-gulp.task('font-awesome',() => {
-	return gulp.src([
+task('font-awesome',() => {
+	return src([
 		'./node_modules/font-awesome/css/font-awesome.min.css',
 		'./node_modules/font-awesome/fonts/*'
 	],{ base: './node_modules' })
-	.pipe(gulp.dest('./assets'))
+	.pipe(dest('./assets'))
 })
 
 // webserver
-gulp.task('webserver',()=>{
-	return gulp.src('./')
+task('webserver',()=>{
+	return src('./')
 	.pipe(webserver({
 		liveload: true,
 		directoryListing: true,
@@ -92,38 +92,27 @@ gulp.task('webserver',()=>{
 })
 
 // assets
-gulp.task('assets',gulp.series('jquery','font-awesome'))
+task('assets',series('jquery','font-awesome'))
 
 // build
-gulp.task('build', gulp.series( gulp.parallel('sass','es6','assets'), 'index'))
+task('build', series( parallel('sass','es','assets'), 'index'))
 
-// production(更新監視なし)
-gulp.task('production',gulp.series(
-	(done)=>{
-		production=true
-		log.info('PRODUCTION MODE')	
-		done()
-	},
+task('default',series(
 	'build',
 	(done)=>{
-		log.info("*** http://localhost:3000/index.html ***")
+		if(PRODUCTION) {
+			log.info("*** [PRODUCTION] http://localhost:3000/index.html ***")
+		} else {
+			log.info("*** [DEVELOPMENT] http://localhost:3000/var/dev/index.html ***")
+		}
+		done()
+	},
+	(done)=>{
+		if(PRODUCTION) { done() }
+		watch('./src/es/*.js',             series('es'))
+		watch('./src/sass/*.scss',         series('sass'))
+		watch('./src/templates/index.ejs', series('index'))
 		done()
 	},
 	'webserver'
 ))
-
-// development(更新監視あり)
-gulp.task('development',gulp.series(
-	'build',
-	(done)=>{
-		gulp.watch('./src/es6/*.es6',           gulp.series('es6'))
-		gulp.watch('./src/sass/*.scss',         gulp.series('sass'))
-		gulp.watch('./src/templates/index.ejs', gulp.series('index'))
-		log.info("*** http://localhost:3000/var/dev/index.html ***")
-		done()
-	},
-	'webserver'
-))
-
-gulp.task('default',gulp.series('development'))
-

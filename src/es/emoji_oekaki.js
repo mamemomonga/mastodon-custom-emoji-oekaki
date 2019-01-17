@@ -1,6 +1,6 @@
 // vim:ft=javascript
-import Utility from './utility.es6'
-import EmojiMojis from './emoji_mojis.es6'
+import Utility from './utility'
+import EmojiMojis from './emoji_mojis'
 
 export default class EmojiOekaki {
 	constructor(args){
