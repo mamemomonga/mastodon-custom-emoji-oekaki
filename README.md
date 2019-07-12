@@ -27,11 +27,15 @@ https://mamemomonga.github.io/mastodon-custom-emoji-oekaki/
 
 developmentの実行、http://localhost:3000/var/dev/index.html
 
-	$ yarn run gulp
+	$ NODE_ENV=development yarn run gulp
 
 productionの実行、http://localhost:3000/index.html
 
-	$ yarn run gulp production
+	$ NODE_ENV=production yarn run gulp
+
+GitHub Pagesを利用したリリース
+
+productionを一度実行すると index.html が更新されますので、それをコミットしてください。
 
 # License
 
